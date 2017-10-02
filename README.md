@@ -9,7 +9,6 @@ The goals of **Marshpillow** is to create python models that:
 * are compact
 * are easily scalable
 * have a live connection to an API
-* can optionally be automatically updated based on changes to an API
 
 ## Status
 
