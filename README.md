@@ -1,4 +1,4 @@
-# **Marshpillow** (cuter name pending...)
+# **Marshpillow**
 
 **Marshpillow** is a small framework for interacting with APIs.
 
