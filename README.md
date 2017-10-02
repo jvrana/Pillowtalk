@@ -8,6 +8,7 @@ Theres lots of libraries for creating APIs but not alot of libraries for interac
 The goals of **Marshpillow** is to create python models that:
 * are compact
 * are easily scalable
+* are easily maintained through changes to some API
 * have a live connection to an API
 
 ## Status
