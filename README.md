@@ -82,6 +82,12 @@ p.friends # returns list of Person models accessed through the database through 
 p.address # returns Address model through the AddressAssociation model gather from the database
 ```
 
+Notice how there was no real reference to the address data in the person data. Marshpillow magically used a API connection
+to find the address_data and unmarshall it to an Address object!
+
+### TODO: Show that Marshpillow works like a regular Marshmallow Schema/Model### 
+### TODO: New name? Marsupial? Marshsupial? MarshSoupial? (I like Marsupial...could have a picture of a koala...)\
+
 Create new instances and dump them to JSON
 ```python
 a = Address(address_str="Somewhere in Seattle, WA")
