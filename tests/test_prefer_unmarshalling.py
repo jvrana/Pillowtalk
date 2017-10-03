@@ -15,6 +15,7 @@ def models(mybase):
             HasOne("address", "address", "address", "find")
         ]
         # TODO: HasOne("address", "address", "address_id OR address["id"]", "find")
+        # TODO: Multiple relationships?
 
     @add_schema
     class Address(mybase):

@@ -157,6 +157,10 @@ class Base(object):
             # TODO: Try to unmarshall if its something like "sequences": {"id"}
         return v
 
+    # TODO: allow ability to get and fullfill multiple relationships
+    def _get_relationship(self, name):
+        return self.Schema.relationships[name]
+
     def _has_relationship(self, name):
         return name in self.Schema.relationships
 
@@ -164,9 +168,6 @@ class Base(object):
     def model_fields(cls):
         members = inspect.getmembers(cls, lambda a: not (inspect.isroutine(a)))
         return [m for m in members if issubclass(m[1].__class__, fields.Field)]
-
-    def _get_relationship(self, name):
-        return self.Schema.relationships[name]
 
     def fullfill_relationship(self, relationship_name):
         """
