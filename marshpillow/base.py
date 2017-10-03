@@ -144,18 +144,29 @@ class Base(object):
         # print("Getting {} from {}".format(name, self.__class__.__name__))
         if name not in vars(self):
             # print("{} not in object".format(name))
-            if name in self.Schema.relationships:
+            if self._has_relationship(name):
                 # print("fullfilling relationship...")
                 v = self.fullfill_relationship(name)
                 if saveattr:
                     setattr(self, name, v)
                 return v
-        return super().__getattribute__(name)
+        v = super().__get_attribute__()
+        if self._has_relationship(name):
+            r = self._get_relationship(name)
+            fxn = r._get_function()
+            # TODO: Try to unmarshall if its something like "sequences": {"id"}
+        return v
+
+    def _has_relationship(self, name):
+        return name in self.Schema.relationships
 
     @classmethod
     def model_fields(cls):
         members = inspect.getmembers(cls, lambda a: not (inspect.isroutine(a)))
         return [m for m in members if issubclass(m[1].__class__, fields.Field)]
+
+    def _get_relationship(self, name):
+        return self.Schema.relationships[name]
 
     def fullfill_relationship(self, relationship_name):
         """
@@ -164,7 +175,7 @@ class Base(object):
         Sample
             Promise("sample_type", <SampleType>, "sample_type_id", "find")
         """
-        relationship = self.Schema.relationships[relationship_name]
+        relationship = self._get_relationship(relationship_name)
         return relationship.fullfill(self)
 
     # def _parse_model_from_name(self, name):

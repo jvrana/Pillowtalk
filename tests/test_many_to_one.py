@@ -33,8 +33,3 @@ def test_basic(mybase):
     print(p.emails)
     person_emails = p.emails
     assert len(p.emails) == len(email_json)
-
-    # TODO: C1 has many C2. By default, if C2 has one nested field referencing C1, than find all C2 with C1. Else
-    # TODO: through error, UNLESS it is specified which attribute to use to reference
-    # TODO: How to do associations???
-

@@ -160,13 +160,3 @@ def test_load_many(mybase):
 
 
     # assert p.description == person_data["description"]
-
-    # TODO: Longhand option, if you additional fields to your model, it will be incorporated into the Schema
-    # TODO: flexibility for defining __init__
-    # TODO: Test load standard
-    # TODO: Test load simple reference to a model (e.g. XYZ_id)
-    # TODO: Test reference to a model through alternative reference (e.g. name)
-    # TODO: Test reference to a model through an association
-    # TODO: test dump for each of the above
-    # TODO: Test back and forth
-    # TODO: Test database find methods using SQL or different HUG APIs?

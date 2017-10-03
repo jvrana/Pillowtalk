@@ -8,7 +8,24 @@ class Relationship(object):
         self.get_association = get_association
 
     def _get_param(self, this):
-        return getattr(this, self.with_reference)
+        # TODO: When to switch between attr and dict formats?
+        """
+        e.g.
+            self.with_reference: "person_id", this: a Person
+            return p.id
+
+        e.g.
+            self.with_reference: "id", this: {"id": 4}
+            return this["id"]
+
+
+        :param this:
+        :return:
+        """
+        if hasattr(this, self.with_reference):
+            return getattr(this, self.with_reference)
+        elif self.with_reference in this:
+            return this[self.with_reference]
         # TODO: or try to interpret "sample_type[id]" to unmarshal dictionary objects
 
     def fullfill(self, this):
