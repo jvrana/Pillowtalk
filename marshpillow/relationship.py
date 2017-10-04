@@ -2,7 +2,7 @@ class Relationship(object):
     def __init__(self, attribute, with_model, with_reference, with_function, with_attribute=None, get_association=None):
         self.attribute = attribute
         self.with_model = with_model
-        self.with_reference = with_reference
+        self.with_reference = with_reference # e.g. {"id": "address_id"} <> address.id = other_thing.address_id
         self.with_function = with_function
         self.with_attribute = with_attribute
         self.get_association = get_association
