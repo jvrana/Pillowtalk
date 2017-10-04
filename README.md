@@ -74,7 +74,7 @@ person_data = {
 }
 ```
 
-### Magically marshal associated models on the fly through database connection!
+### Magically marshal associated models on the fly through database connection
 
 ```python
 p = Person.load(person_data)
