@@ -14,7 +14,7 @@ def person_models(mybase):
         # ADDITIONAL_FIELDS = dict(
         #         description=fields.String(required=False)
         # )
-        RELATIONSHIPS = ["address"]
+        RELATIONSHIPS = ["Address"]
 
     @add_schema
     class Address(mybase):
@@ -128,7 +128,7 @@ def test_with_using_find_function(mybase):
         items = []
         FIELDS = ["id", "name"]
         RELATIONSHIPS = [
-            Relationship("email", "email", "email_id", "find")
+            SmartRelation("email", "find Person.email_id <> Email.id")
         ]
 
     person_json = {"id": 5, "name": "Jill", "email_id": 4}
@@ -146,7 +146,7 @@ def test_load_many(mybase):
         items = []
         FIELDS = ["id", "address"]
         RELATIONSHIPS = [
-            Relationship(attribute="person", with_model="person", with_reference="person_id", with_function="find")
+            SmartRelation("person", "find Email.person_id <> Person.id")
         ]
 
     email_json = [

@@ -12,7 +12,7 @@ def models(mybase):
         items = []
         FIELDS = ["id", "name"]
         RELATIONSHIPS = [
-            Relationship("address", "address", "address_id", "find")
+            SmartRelation("address", "find Person.address_id <> Address.id")
         ]
 
     @add_schema

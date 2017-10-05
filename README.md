@@ -1,6 +1,6 @@
 # **Marshpillow**
 
-**Marshpillow** is a small framework for interacting with APIs. **Marshpillow** generates ORM python models and schemas for interacting with APIs. It can even *guess* the object relations from a JSON file and automatically generate a code skeletons for those relations
+**Marshpillow** is a small library for interacting with APIs. **Marshpillow** generates ORM python models and schemas for interacting with APIs. It can even *guess* the object relations from a JSON file and automatically generate a code skeletons for those relations
 
 ## Why another library? (better description pending...)
 Theres lots of libraries for creating APIs but not alot of libraries for interacting with those APIs. Behind most APIs is an underlying object relation structure (hopefully!). **Marshpillow** guesses these relations and tries to deserialize data on-the-fly through an API connection to as app, website, or database. 

@@ -6,10 +6,24 @@ class Utils(object):
 
     @staticmethod
     def snake_to_camel(s):
-        return s.replace("_", " ").title().replace(" ", "")
+        if Utils.is_snake(s):
+            return s.replace("_", " ").title().replace(" ", "")
+        else:
+            return s
 
     @staticmethod
     def camel_to_snake(s):
-        return "_".join(re.findall('[A-Z][^A-Z]*', s)).lower()
+        if Utils.is_camel(s):
+            return "_".join(re.findall('[A-Z][^A-Z]*', s)).lower()
+        else:
+            return s
+
+    @staticmethod
+    def is_snake(s):
+        return " " not in s and s.lower() == s
+
+    @staticmethod
+    def is_camel(s):
+        return " " not in s and s[0].isupper()
 
 utils = Utils

@@ -80,28 +80,35 @@ def add_schema(cls, *args, **kwargs):
             self._load_one_and_many()
 
         def _save_relationship(self, relation):
-            self.__class__.relationships[relation.attribute] = relation
-            if relation.with_reference not in self.fields:
-                self.fields[relation.with_reference] = fields.Raw()
+            self.__class__.relationships[relation.name] = relation
+            if relation.a1 not in self.fields:
+                self.fields[relation.a1] = fields.Raw()
 
         def _attach_model_to_relation(self, relation):
-            if type(relation.with_model) is str:
-                relation.with_model = cls.get_model_by_name(relation.with_model)
+            if type(relation.m2) is str:
+                relation.m2 = cls.get_model_by_name(relation.m2)
 
         def _load_one_and_many(self):
             """ create nested fields from ONE and MANY """
+            """
+                Types of relationships:
+                    ["Address"]
+                    SmartRelation(m1, a1, etc.)
+            """
             if hasattr(cls, "RELATIONSHIPS"):
                 for relation in cls.RELATIONSHIPS:
+                    model = None
                     many = False
-                    model_name = relation
-                    if issubclass(relation.__class__, Relationship):
-                        model_name = relation.with_model
+                    if type(relation) is str:
+                        model = cls.get_model_by_name(relation)
+                    elif issubclass(relation.__class__, Relationship):
                         self._attach_model_to_relation(relation)
                         self._save_relationship(relation)
-                        if type(relation) is HasMany or type(relation) is Association:
+                        if relation.many:
                             many = True
-                    schema = cls.get_model_by_name(model_name).Schema
-                    self.fields[model_name] = fields.Nested(schema, many=many)
+                        model = relation.m2
+                    attribute_name = utils.camel_to_snake(model.__name__)
+                    self.fields[attribute_name] = fields.Nested(model.Schema, many=many)
 
         def _clone_fields_from_model(self, model):
             """ Clone fields defined in model to model.Schema """
@@ -134,27 +141,41 @@ class Base(object):
         vars(self).update(kwargs)
         self.raw = None
         self.__class__.check_for_schema()
+        self._unmarshall = False
 
     @classmethod
     def check_for_schema(cls):
         if not hasattr(cls, "Schema") or cls.Schema is None:
             raise MarshpillowError("Schema not found. @add_schema may not have been added to class definition.")
 
+    def __getattribute__(self, name):
+        schema_cls = object.__getattribute__(self, "Schema")
+        unmarshal = object.__getattribute__(self, "_unmarshall")
+        x = object.__getattribute__(self, name)
+        if name in schema_cls.relationships and unmarshal:
+            r = schema_cls.relationships[name]
+            if type(x) is r.m2:
+                pass
+            else:
+                print("Hey this should fullfill "+name+"!")
+                print(x)
+                new_x = r.fullfill(self)
+                if new_x is not None:
+                    x = new_x
+            #     return r.fullfill(self)
+        return x
+
     def __getattr__(self, name, saveattr=False):
         # print("Getting {} from {}".format(name, self.__class__.__name__))
-        if name not in vars(self):
-            # print("{} not in object".format(name))
-            if self._has_relationship(name):
-                # print("fullfilling relationship...")
-                v = self.fullfill_relationship(name)
-                if saveattr:
-                    setattr(self, name, v)
-                return v
-        v = super().__get_attribute__()
-        if self._has_relationship(name):
-            r = self._get_relationship(name)
-            fxn = r._get_function()
-            # TODO: Try to unmarshall if its something like "sequences": {"id"}
+        schema_cls = object.__getattribute__(self, "Schema")
+
+        if name in schema_cls.relationships:
+            # print("fullfilling relationship...")
+            v = self.fullfill_relationship(name)
+            if saveattr:
+                setattr(self, name, v)
+            return v
+        v = object.__getattribute__(self, name)
         return v
 
     # TODO: allow ability to get and fullfill multiple relationships
@@ -162,7 +183,8 @@ class Base(object):
         return self.Schema.relationships[name]
 
     def _has_relationship(self, name):
-        return name in self.Schema.relationships
+        schema_cls = object.__getattribute__(self, "Schema")
+        return name in schema_cls.relationships
 
     @classmethod
     def model_fields(cls):
@@ -212,17 +234,27 @@ class Base(object):
             return {}
 
     @classmethod
-    def json_to_model(cls, result):
-        m = cls.to_model(result)
-        m.raw = result
+    def _set_unmarshall(cls, x):
+        if issubclass(x, cls):
+            object.__setattr(x, "_unmarshall", True)
+
+    @classmethod
+    def json_to_model(cls, data):
+        m = cls.to_model(data)
+        m.raw = data
+        cls._unlock_unmarshalling(m)
         return m
 
     @classmethod
-    def json_to_models(cls, result):
-        m = cls.to_model(result, {"many": True})
-        for r, model in zip(result, m):
+    def json_to_models(cls, data):
+        m = cls.to_model(data, {"many": True})
+        for r, model in zip(data, m):
             model.raw = r
+            cls._unlock_unmarshalling(model)
         return m
+
+    def _unlock_unmarshalling(self):
+        object.__setattr__(self, "_unmarshall", True)
 
     # def fullfill(self, name, relationship):
     #     if relationship.reference is None:
