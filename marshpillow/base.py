@@ -100,17 +100,19 @@ def add_schema(cls, *args, **kwargs):
             if hasattr(cls, "RELATIONSHIPS"):
                 for relation in cls.RELATIONSHIPS:
                     model = None
+                    attribute_name = None
                     many = False
                     if type(relation) is str:
-                        model = cls.get_model_by_name(relation)
+                        attribute_name = relation
+                        model = cls.get_model_by_name(attribute_name)
                     elif issubclass(relation.__class__, Relationship):
                         self._attach_model_to_relation(relation)
                         self._save_relationship(relation)
                         if relation.many:
                             many = True
                         model = relation.mod2
-                    attribute_name = utils.camel_to_snake(model.__name__)
-                    self.fields[attribute_name] = fields.Nested(model.Schema, many=many)
+                        attribute_name = relation.name
+                    self.fields[utils.camel_to_snake(attribute_name)] = fields.Nested(model.Schema, many=many)
 
         def _clone_fields_from_model(self, model):
             """ Clone fields defined in model to model.Schema """
@@ -155,15 +157,15 @@ class Base(object):
         schema_cls = object.__getattribute__(self, "Schema")
         unmarshal = object.__getattribute__(self, "_unmarshall")
         x = object.__getattribute__(self, name)
-        if name in schema_cls.relationships and unmarshal:
-            r = schema_cls.relationships[name]
-            if type(x) is r.mod2:
-                pass
-            else:
-                new_x = self.fullfill_relationship(name)
-                if new_x is not None:
-                    x = new_x
-                    #     return r.fullfill(self)
+        if name in schema_cls.relationships:
+            if unmarshal:
+                r = schema_cls.relationships[name]
+                if type(x) is r.mod2:
+                    return x
+                else:
+                    new_x = self.fullfill_relationship(name)
+                    if new_x is not None and new_x != []:
+                        x = new_x
         return x
 
     def __getattr__(self, name, saveattr=False):

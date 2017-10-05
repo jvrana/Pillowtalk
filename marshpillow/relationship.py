@@ -30,7 +30,7 @@ class Relationship(object):
     def _get_param(self, with_this):
         if self.attr1 in vars(with_this):
             p = self.__class__.get_chained(with_this, self.attr1)
-            if hasattr(p, "__iter__") and self.attr2[-1] in p:
+            if type(p) is dict and self.attr2[-1] in p:
                 return p[self.attr2[-1]]
             else:
                 return p
