@@ -9,8 +9,10 @@ from marshpillow.utils import utils
 class MarshpillowError(Exception):
     """ Generic MarshpillowException """
 
+
 class MarshpillowInitializerError(Exception):
     """ Generic initializer exception """
+
 
 def validate_init(fxn):
     """ Raises errors for dynamically generated __init__ definitions """
@@ -135,6 +137,7 @@ class Base(object):
 
     Schema = None
     models = {}
+    unmarshall = "_unmarshall"
 
     @validate_init
     def __init__(self, *args, **kwargs):
@@ -157,12 +160,10 @@ class Base(object):
             if type(x) is r.mod2:
                 pass
             else:
-                print("Hey this should fullfill "+name+"!")
-                print(x)
-                new_x = r.fullfill(self)
+                new_x = self.fullfill_relationship(name)
                 if new_x is not None:
                     x = new_x
-            #     return r.fullfill(self)
+                    #     return r.fullfill(self)
         return x
 
     def __getattr__(self, name, saveattr=False):
@@ -199,7 +200,10 @@ class Base(object):
             Promise("sample_type", <SampleType>, "sample_type_id", "find")
         """
         relationship = self._get_relationship(relationship_name)
-        return relationship.fullfill(self)
+        self._lock_unmarshalling()
+        x = relationship.fullfill(self)
+        self._unlock_unmarshalling()
+        return x
 
     # def _parse_model_from_name(self, name):
     #     model_name = utils.snake_to_camel(name)
@@ -234,11 +238,6 @@ class Base(object):
             return {}
 
     @classmethod
-    def _set_unmarshall(cls, x):
-        if issubclass(x, cls):
-            object.__setattr(x, "_unmarshall", True)
-
-    @classmethod
     def json_to_model(cls, data):
         m = cls.to_model(data)
         m.raw = data
@@ -253,8 +252,11 @@ class Base(object):
             cls._unlock_unmarshalling(model)
         return m
 
+    def _lock_unmarshalling(self):
+        object.__setattr__(self, Base.unmarshall, False)
+
     def _unlock_unmarshalling(self):
-        object.__setattr__(self, "_unmarshall", True)
+        object.__setattr__(self, Base.unmarshall, True)
 
     # def fullfill(self, name, relationship):
     #     if relationship.reference is None:
@@ -291,3 +293,7 @@ class Base(object):
             return cls.json_to_model(data)
         else:
             raise MarshpillowError("Data not recognized. Supply a dict or list: \"{0}\"".format(data))
+
+    # TODO: Force unmarshalling of all or some of the relationships...
+    def force(self):
+        raise NotImplementedError("Force is not yet implemented")

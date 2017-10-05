@@ -29,47 +29,55 @@ class Relationship(object):
 
     def _get_param(self, with_this):
         if self.attr1 in vars(with_this):
-            p = object.__getattribute__(with_this, self.attr1)
-            if hasattr(p, "__iter__") and self.attr2 in p:
-                return p[self.attr2]
+            p = self.__class__.get_chained(with_this, self.attr1)
+            if hasattr(p, "__iter__") and self.attr2[-1] in p:
+                return p[self.attr2[-1]]
             else:
                 return p
 
     def fullfill(self, with_this):
         """
-        find BudgetAssociation.person_id <> Person.id
-           Person.find(this.person_id)
+        without envelope
+            mod2.fxn( mod1.attr1 )
 
-        where Person.id <> Email.person_id
-           Email.where( {"person_id": this.id} )
+        with envelope:
+            mod2.fxn( {attr2: mod1.attr1} )
 
-        where Person.id <> BudgetAssociation.person_id THEN BudgetAssociation.budget
-        BudgetAssociation.where( {"person_id": this.id } )
-        for each ba:
-            return bs.budget
+        with envelope and mod3/attr3
+            [ x.attr3 for x in mod2.fxn( {attr2: mod1.attr1} ) ]
         """
         fxn = self._get_function()
         p = self._get_param(with_this)
         if self.envelope:
-            p = {self.attr2: p}
+            p = {self.attr2[-1]: p}
         r = fxn(p)
         if not type(r) is list:
             r = [r]
         if self.attr3:
-            r = [getattr(x, self.attr3) for x in r]
+            r = [self.__class__.get_chained(x, *self.attr3) for x in r]
         if not self.many:
             r = r[0]
         return r
 
+    @classmethod
+    def get_chained(cls, obj, *attributes):
+        if attributes == []:
+            return obj
+        v = getattr(obj, attributes[0])
+        # v = object.__getattribute__(obj, attributes[0])
+        if len(attributes) == 1:
+            return v
+        else:
+            cls.get_chained(v, attributes[1:])
 
 class SmartRelationship(Relationship):
     def __init__(self, name, relation_str, envelope=False, many=False):
         fxn, model_attributes = self._parse_relationship_string(relation_str)
         m1, a1 = model_attributes[0]
-        m2, a2 = model_attributes[1]
+        m2, *a2 = model_attributes[1]
         m3, a3 = None, None
         if len(model_attributes) >= 3:
-            m3, a3 = model_attributes[2]
+            m3, *a3 = model_attributes[2]
         super().__init__(name, fxn, m1, a1, m2, a2, m3, a3, envelope=envelope, many=many)
 
     def _parse_relationship_string(self, s):
