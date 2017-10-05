@@ -12,7 +12,7 @@ def models(mybase):
         #         description=fields.String(required=False)
         # )
         RELATIONSHIPS = [
-            SmartRelation("address", "find Person.address <> Address.id")
+            One("address", "find Person.address <> Address.id")
         ]
 
     @add_schema

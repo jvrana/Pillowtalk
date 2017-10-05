@@ -8,9 +8,8 @@ def test(mybase):
         items = []
         FIELDS = ["id", "name"]
         RELATIONSHIPS = [
-            SmartRelation("budgets", "where Person.id <> BudgetAssociation.person_id <> BudgetAssociation.budget",
-                          True, True),
-            SmartRelation("emails", "where Person.id <> Email.person_id", True, True)
+            Many("budgets", "where Person.id <> BudgetAssociation.person_id <> BudgetAssociation.budget"),
+            Many("emails", "where Person.id <> Email.person_id")
         ]
 
     @add_schema
@@ -18,7 +17,7 @@ def test(mybase):
         items = []
         FIELDS = ["id", "name"]
         RELATIONSHIPS = [
-            SmartRelation("people", "where Budget.id <> BudgetAssociation.person_id <> BudgetAssociation.person")
+            Many("people", "where Budget.id <> BudgetAssociation.person_id <> BudgetAssociation.person")
         ]
 
     @add_schema
@@ -26,8 +25,8 @@ def test(mybase):
         items = []
         FIELDS = ["id"]
         RELATIONSHIPS = [
-            SmartRelation("person", "find BudgetAssociation.person_id <> Person.id", True, True),
-            SmartRelation("budget", "find BudgetAssociation.budget_id <> Budget.id", True, True)
+            One("person", "find BudgetAssociation.person_id <> Person.id"),
+            One("budget", "find BudgetAssociation.budget_id <> Budget.id")
         ]
 
     @add_schema
@@ -35,7 +34,7 @@ def test(mybase):
         items = []
         FIELDS = ["id", "address"]
         RELATIONSHIPS = [
-            SmartRelation("person", "find Email.person_id <> Person.id")
+            One("person", "find Email.person_id <> Person.id")
         ]
 
     people_data = [

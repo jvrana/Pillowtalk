@@ -12,7 +12,7 @@ def models(mybase):
         #         description=fields.String(required=False)
         # )
         RELATIONSHIPS = [
-            SmartRelation("address", "find Person.address_id <> Address.id")
+            One("address", "find Person.address_id <> Address.id")
         ]
 
     @add_schema
@@ -20,7 +20,7 @@ def models(mybase):
         items = []
         FIELDS = ["id", "address_str"]
         RELATIONSHIPS = [
-            SmartRelation("street", "find Person.street_id <> Street.id")
+            One("street", "find Person.street_id <> Street.id")
         ]
     @add_schema
     class Street(mybase):

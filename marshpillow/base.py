@@ -2,7 +2,7 @@ import inspect
 
 from marshmallow import Schema, SchemaOpts, fields, post_load
 
-from marshpillow.relationship import Association, HasMany, Relationship
+from marshpillow.relationship import Relationship
 from marshpillow.utils import utils
 
 
@@ -81,19 +81,19 @@ def add_schema(cls, *args, **kwargs):
 
         def _save_relationship(self, relation):
             self.__class__.relationships[relation.name] = relation
-            if relation.a1 not in self.fields:
-                self.fields[relation.a1] = fields.Raw()
+            if relation.attr1 not in self.fields:
+                self.fields[relation.attr1] = fields.Raw()
 
         def _attach_model_to_relation(self, relation):
-            if type(relation.m2) is str:
-                relation.m2 = cls.get_model_by_name(relation.m2)
+            if type(relation.mod2) is str:
+                relation.mod2 = cls.get_model_by_name(relation.mod2)
 
         def _load_one_and_many(self):
             """ create nested fields from ONE and MANY """
             """
                 Types of relationships:
                     ["Address"]
-                    SmartRelation(m1, a1, etc.)
+                    SmartRelation(mod1, attr1, etc.)
             """
             if hasattr(cls, "RELATIONSHIPS"):
                 for relation in cls.RELATIONSHIPS:
@@ -106,7 +106,7 @@ def add_schema(cls, *args, **kwargs):
                         self._save_relationship(relation)
                         if relation.many:
                             many = True
-                        model = relation.m2
+                        model = relation.mod2
                     attribute_name = utils.camel_to_snake(model.__name__)
                     self.fields[attribute_name] = fields.Nested(model.Schema, many=many)
 
@@ -154,7 +154,7 @@ class Base(object):
         x = object.__getattribute__(self, name)
         if name in schema_cls.relationships and unmarshal:
             r = schema_cls.relationships[name]
-            if type(x) is r.m2:
+            if type(x) is r.mod2:
                 pass
             else:
                 print("Hey this should fullfill "+name+"!")

@@ -8,7 +8,7 @@ def test_basic(mybase):
         items = []
         FIELDS = ["id", "address"]
         RELATIONSHIPS = [
-            SmartRelation("person", "find Email.person_id <> Person.id")
+            One("person", "find Email.person_id <> Person.id")
         ]
 
     @add_schema
@@ -16,7 +16,7 @@ def test_basic(mybase):
         items = []
         FIELDS = ["id", "name"]
         RELATIONSHIPS = [
-            SmartRelation("emails", "where Person.id <> Email.person_id", True, True)
+            Many("emails", "where Person.id <> Email.person_id")
         ]
 
 
