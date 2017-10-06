@@ -7,7 +7,7 @@ from marshpillow.utils import utils
 
 
 # TODO: Inherit fields and relationships from super class
-
+# TODO: Automatically load class when relationship is fullfilled so you don't have to code in cls.load(r) in the Base class you use
 class MarshpillowError(Exception):
     """ Generic MarshpillowException """
 
