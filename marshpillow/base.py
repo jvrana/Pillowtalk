@@ -14,6 +14,8 @@ class MarshpillowInitializerError(Exception):
     """ Generic initializer exception """
 
 
+# TODO: Rename "RELATIONSHIPS", "FIELDS" to something shorter
+
 def validate_init(fxn):
     """ Raises errors for dynamically generated __init__ definitions """
 
@@ -285,6 +287,7 @@ class Base(object):
                                   "from a "
                                   "str.".format(cls.__name__))
 
+    # TODO: forward propogate properties if there is a relationship...from
     @classmethod
     def load(cls, data):
         """ Special load that will unmarshall dict objects or a list of dict objects """

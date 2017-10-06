@@ -1,6 +1,12 @@
 import re
 
 
+# TODO: OneToMany
+# TODO: ManyToOne
+# TODO: OneToOne
+# TODO: ManyToMany
+# TODO: Make sure normal marshmallow relationships (self relationships for e.g.) can happen
+
 class RelationshipError(Exception):
     """ Generic relationship error """
 
