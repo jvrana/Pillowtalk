@@ -41,6 +41,7 @@ class Relationship(object):
             else:
                 return p
 
+    # TODO: Propogate relationships forward
     def fullfill(self, with_this):
         """
         without envelope

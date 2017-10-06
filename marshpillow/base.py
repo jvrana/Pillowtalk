@@ -6,6 +6,8 @@ from marshpillow.relationship import Relationship
 from marshpillow.utils import utils
 
 
+# TODO: Inherit fields and relationships from super class
+
 class MarshpillowError(Exception):
     """ Generic MarshpillowException """
 
@@ -196,6 +198,7 @@ class Base(object):
         members = inspect.getmembers(cls, lambda a: not (inspect.isroutine(a)))
         return [m for m in members if issubclass(m[1].__class__, fields.Field)]
 
+    # TODO: Propogate attributes
     def fullfill_relationship(self, relationship_name):
         """
         Fullfills a relationship using "using", "ref", "fxn."
@@ -286,6 +289,9 @@ class Base(object):
                                   "model "
                                   "from a "
                                   "str.".format(cls.__name__))
+
+    def _propogate_attributes(self):
+        """ Propogates attributes forward for vanilla Marshmallow objects and fullfilled relationship """
 
     # TODO: forward propogate properties if there is a relationship...from
     @classmethod
