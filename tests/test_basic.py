@@ -60,11 +60,11 @@ def test_basic_attributes(person):
 def test_models_accessible_from_Base_class(person):
     p, person_data, address_data, Person, Address = person
 
-    print(Base.models)
+    print(MarshpillowBase.models)
     for cls in [Person, Address]:
         name = cls.__name__
-        assert name in Base.models
-        assert Base.models[name] == cls
+        assert name in MarshpillowBase.models
+        assert MarshpillowBase.models[name] == cls
 
 
 def test_schema_accessible_from_model(person):

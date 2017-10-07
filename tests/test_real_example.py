@@ -111,7 +111,7 @@ def test_benchling_example():
 
     Session.create("sk_GbNYfhnukDU30J5fAebIjEj0d4YlJ")
 
-    class MyBase(Base):
+    class MyBase(MarshpillowBase):
 
         items = {}
 

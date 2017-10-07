@@ -3,8 +3,7 @@ import inspect
 from marshmallow import Schema, SchemaOpts, fields, post_load
 
 from marshpillow.relationship import Relationship
-from marshpillow.utils import utils
-
+import inflection
 
 # TODO: Inherit fields and relationships from super class
 # TODO: Automatically load class when relationship is fullfilled so you don't have to code in cls.load(r) in the Base class you use
@@ -67,7 +66,7 @@ def add_schema(cls, *args, **kwargs):
     """ Decorator that adds a dynamically generated schema to a model """
 
     # add model to Base.models
-    Base.models[cls.__name__] = cls
+    MarshpillowBase.models[cls.__name__] = cls
 
     # automatically generated Schema
     class ModSchema(BaseSchema):
@@ -116,14 +115,13 @@ def add_schema(cls, *args, **kwargs):
                             many = True
                         model = relation.mod2
                         attribute_name = relation.name
-                    self.fields[utils.camel_to_snake(attribute_name)] = fields.Nested(model.Schema, many=many)
+                    self.fields[inflection.underscore(attribute_name)] = fields.Nested(model.Schema, many=many)
 
         def _clone_fields_from_model(self, model):
             """ Clone fields defined in model to model.Schema """
             for field_name, field in model.model_fields():
                 self.fields[field_name] = field
 
-        # TODO: if ok to leave un-marshalled, then try to fullfill the promise when called?
         @post_load
         def make(self, data):
             try:
@@ -138,7 +136,7 @@ def add_schema(cls, *args, **kwargs):
     return cls
 
 
-class Base(object):
+class MarshpillowBase(object):
     """ Basic model for api items """
 
     Schema = None
@@ -185,7 +183,6 @@ class Base(object):
         v = object.__getattribute__(self, name)
         return v
 
-    # TODO: allow ability to get and fullfill multiple relationships
     def _get_relationship(self, name):
         return self.Schema.relationships[name]
 
@@ -213,7 +210,7 @@ class Base(object):
         return x
 
     # def _parse_model_from_name(self, name):
-    #     model_name = utils.snake_to_camel(name)
+    #     model_name = inflection.camelize(name)
     #     model = Base.models[model_name]
     #     model_id = getattr(self, name+"_id")
     #     m = model.find(model_id)
@@ -233,7 +230,7 @@ class Base(object):
     @classmethod
     def get_model_by_name(cls, name):
         """ Converts a snake_case model name to the model object """
-        model_name = utils.snake_to_camel(name)  # class name of the model to use
+        model_name = inflection.camelize(name)  # class name of the model to use
         model = cls.models[model_name]
         return model
 
@@ -260,10 +257,10 @@ class Base(object):
         return m
 
     def _lock_unmarshalling(self):
-        object.__setattr__(self, Base.unmarshall, False)
+        object.__setattr__(self, MarshpillowBase.unmarshall, False)
 
     def _unlock_unmarshalling(self):
-        object.__setattr__(self, Base.unmarshall, True)
+        object.__setattr__(self, MarshpillowBase.unmarshall, True)
 
     # def fullfill(self, name, relationship):
     #     if relationship.reference is None:
@@ -274,21 +271,19 @@ class Base(object):
 
     @classmethod
     def find(cls, id):
-        raise NotImplementedError("method \"find\" is not yet implemented for {0}. Find returns a single model from an "
-                                  "id.".format(cls.__name__))
+        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("find", cls.__name__))
 
     @classmethod
     def where(cls, *args, **kwargs):
-        raise NotImplementedError("method \"where\" is not yet implemented for {0}. Where returns multiple models "
-                                  "from a "
-                                  "query.".format(cls.__name__))
+        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("where", cls.__name__))
+
+    @classmethod
+    def all(cls):
+        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("all", cls.__name__))
 
     @classmethod
     def find_by_name(cls, name):
-        raise NotImplementedError("method \"find_by_name\" is not yet implemented for {0}. Where returns a single "
-                                  "model "
-                                  "from a "
-                                  "str.".format(cls.__name__))
+        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("find_by_name", cls.__name__))
 
     def _propogate_attributes(self):
         """ Propogates attributes forward for vanilla Marshmallow objects and fullfilled relationship """

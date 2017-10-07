@@ -9,5 +9,5 @@ setup(
         author='Justin Dane Vrana',
         author_email='',
         description='',
-        install_requires=['marshmallow']
+        install_requires=['marshmallow', 'inflection']
 )

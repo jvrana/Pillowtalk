@@ -3,7 +3,7 @@ from marshpillow import *
 
 @pytest.fixture(scope="module")
 def mybase():
-    class MyBase(Base):
+    class MyBase(MarshpillowBase):
 
         items = []
 
