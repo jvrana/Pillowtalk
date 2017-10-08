@@ -11,6 +11,15 @@ The goals of **Marshpillow** is to create python models that:
 * are easily maintained through changes to some API
 * have a live connection to an API
 
+## Installation
+
+```
+cd directory/to/marshmallow
+pip install .
+```
+
+## Usage
+
 ## Status
 
 V0.0.1 - New and in progress (aka probably don't use it yet)
