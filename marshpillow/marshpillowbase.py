@@ -5,6 +5,8 @@ from marshmallow import Schema, SchemaOpts, fields, post_load
 from marshpillow.relationship import Relationship
 import inflection
 
+# TODO: Ability to add relationships without relationship string interpretation
+# TODO: Wrap model collections in a class such that __getitem__ will fullfill the relationship...
 # TODO: Inherit fields and relationships from super class
 # TODO: Automatically load class when relationship is fullfilled so you don't have to code in cls.load(r) in the Base class you use
 class MarshpillowError(Exception):
@@ -16,7 +18,7 @@ class MarshpillowInitializerError(Exception):
 
 
 # TODO: Rename "RELATIONSHIPS", "FIELDS" to something shorter
-
+# TODO: Raw isn't loading for many fields.Nested relationships
 def validate_init(fxn):
     """ Raises errors for dynamically generated __init__ definitions """
 

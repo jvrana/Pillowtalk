@@ -64,3 +64,9 @@ def test_session_close(fastfoodexample):
     SessionManager.close()
     assert SessionManager.session is None
 
+def test_multiple_session_classes(fastfoodexample):
+
+    class NewSession(SessionManager):
+        pass
+
+    assert NewSession.session is None

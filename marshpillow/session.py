@@ -1,4 +1,13 @@
+# TODO: Make session a dict of class names and session...
+# TODO: Make sessions a dict of dict of classname and sessions
+# TODO: Test to make sure session and sessions aren't shared between Subclasses
+
 class SessionManagerHook(type):
+    #
+    def __init__(cls, name, bases, clsdict):
+        cls.session = None
+        cls.sessions = {}
+        super(SessionManagerHook, cls).__init__(name, bases, clsdict)
 
     def __getattr__(cls, item):
         sessions = cls.sessions
