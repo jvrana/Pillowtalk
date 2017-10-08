@@ -8,7 +8,7 @@ def test_basic(mybase):
         items = []
         FIELDS = ["id", "name"]
         RELATIONSHIPS = [
-            Relationship("people", "budget_association", "id", "where", "budget_id", "person")
+            Many("people", "where Budget.id <> BudgetAssociation.budget_id <> BudgetAssociation.person")
         ]
 
     @add_schema
@@ -16,8 +16,8 @@ def test_basic(mybase):
         items = []
         FIELDS = ["id"]
         RELATIONSHIPS = [
-            Relationship("person", "person", "person_id", "find"),
-            Relationship("budget", "budget", "budget_id", "find")
+            One("person", "find BudgetAssociation.person_id <> Person.id"),
+            One("budget", "find BudgetAssociation.budget_id <> Budget.id")
         ]
 
     @add_schema
@@ -25,7 +25,7 @@ def test_basic(mybase):
         items = []
         FIELDS = ["id", "name"]
         RELATIONSHIPS = [
-            Relationship("budgets", "budget_association", "id", "where", "person_id", "budget")
+            Many("budgets", "where Person.id <> BudgetAssociation.person_id <> BudgetAssociation.budget")
         ]
 
 

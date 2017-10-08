@@ -14,7 +14,7 @@ def person_models(mybase):
         # ADDITIONAL_FIELDS = dict(
         #         description=fields.String(required=False)
         # )
-        RELATIONSHIPS = ["address"]
+        RELATIONSHIPS = ["Address"]
 
     @add_schema
     class Address(mybase):
@@ -60,11 +60,11 @@ def test_basic_attributes(person):
 def test_models_accessible_from_Base_class(person):
     p, person_data, address_data, Person, Address = person
 
-    print(Base.models)
+    print(MarshpillowBase.models)
     for cls in [Person, Address]:
         name = cls.__name__
-        assert name in Base.models
-        assert Base.models[name] == cls
+        assert name in MarshpillowBase.models
+        assert MarshpillowBase.models[name] == cls
 
 
 def test_schema_accessible_from_model(person):
@@ -128,7 +128,7 @@ def test_with_using_find_function(mybase):
         items = []
         FIELDS = ["id", "name"]
         RELATIONSHIPS = [
-            Relationship("email", "email", "email_id", "find")
+            One("email", "find Person.email_id <> Email.id")
         ]
 
     person_json = {"id": 5, "name": "Jill", "email_id": 4}
@@ -146,7 +146,7 @@ def test_load_many(mybase):
         items = []
         FIELDS = ["id", "address"]
         RELATIONSHIPS = [
-            Relationship(attribute="person", with_model="person", with_reference="person_id", with_function="find")
+            One("person", "find Email.person_id <> Person.id")
         ]
 
     email_json = [

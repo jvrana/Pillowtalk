@@ -12,7 +12,7 @@ def models(mybase):
         #         description=fields.String(required=False)
         # )
         RELATIONSHIPS = [
-            HasOne("address", "address", "address_id", "find")
+            One("address", "find Person.address_id <> Address.id")
         ]
 
     @add_schema
@@ -20,7 +20,7 @@ def models(mybase):
         items = []
         FIELDS = ["id", "address_str"]
         RELATIONSHIPS = [
-            HasOne("street", "street", "street_id", "find")
+            One("street", "find Person.street_id <> Street.id")
         ]
     @add_schema
     class Street(mybase):

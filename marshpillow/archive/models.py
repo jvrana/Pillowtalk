@@ -1,6 +1,6 @@
 from marshpillow import *
 
-class AqBase(Base):
+class AqBase(MarshpillowBase):
     """ Basic model for api items """
 
     Schema = None
@@ -10,7 +10,6 @@ class AqBase(Base):
     def __init__(self, *args, **kwargs):
         vars(self).update(kwargs)
 
-    # TODO: Fullfill attribute if it is a Field.Nested...
     def __getattr__(self, name):
         if name in vars(self):
             return getattr(self, name)
@@ -19,7 +18,7 @@ class AqBase(Base):
 
     def _parse_model_from_name(self, name):
         model_name = utils.snake_to_camel(name)
-        model = Base.models[model_name]
+        model = MarshpillowBase.models[model_name]
         model_id = getattr(self, name+"_id")
         m = model.find(model_id)
         setattr(self, name, m)

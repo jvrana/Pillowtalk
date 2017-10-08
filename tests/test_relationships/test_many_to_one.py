@@ -8,7 +8,7 @@ def test_basic(mybase):
         items = []
         FIELDS = ["id", "address"]
         RELATIONSHIPS = [
-            Relationship("person", "person", "person_id", "find")
+            One("person", "find Email.person_id <> Person.id")
         ]
 
     @add_schema
@@ -16,7 +16,7 @@ def test_basic(mybase):
         items = []
         FIELDS = ["id", "name"]
         RELATIONSHIPS = [
-            Relationship("emails", "email", "id", "where", "person_id")
+            Many("emails", "where Person.id <> Email.person_id")
         ]
 
 
@@ -29,7 +29,8 @@ def test_basic(mybase):
 
     p = Person.load(person_json)
     emails = Email.load(email_json)
-    assert emails[1].person == p
+    p2 = emails[1].person
+    assert p2 == p
     print(p.emails)
     person_emails = p.emails
     assert len(p.emails) == len(email_json)

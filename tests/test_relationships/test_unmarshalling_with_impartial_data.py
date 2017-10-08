@@ -12,10 +12,8 @@ def models(mybase):
         #         description=fields.String(required=False)
         # )
         RELATIONSHIPS = [
-            HasOne("address", "address", "address", "find")
+            One("address", "find Person.address <> Address.id")
         ]
-        # TODO: HasOne("address", "address", "address_id OR address["id"]", "find")
-        # TODO: Multiple relationships?
 
     @add_schema
     class Address(mybase):
@@ -24,7 +22,7 @@ def models(mybase):
 
     return Person, Address
 
-def test_unmarshalling(models):
+def test_vanilla_unmarshalling(models):
     Person, Address = models
 
     address_data = {
@@ -41,18 +39,20 @@ def test_unmarshalling(models):
     p = Person.load(person_data)
     assert type(p.address) is Address
 
-def test_unmarshall_from_incomplete_data(models):
+def test_incomplete_data(models):
     Person, Address = models
 
-    address_data = {
-        "id"         : 3
+    address_data_full = {
+        "id"         : 3,
+        "address_str": "Seattle, WA"
     }
 
     person_data = {
         "id"     : 5,
         "name"   : "Jeff",
-        "address": address_data
+        "address": { "id" : 3}
     }
-
+    a = Address.load(address_data_full)
     p = Person.load(person_data)
+    p.address
     assert type(p.address) is Address

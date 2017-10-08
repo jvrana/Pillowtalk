@@ -2,16 +2,23 @@ import inspect
 
 from marshmallow import Schema, SchemaOpts, fields, post_load
 
-from marshpillow.relationship import Association, HasMany, Relationship
-from marshpillow.utils import utils
+from marshpillow.relationship import Relationship
+import inflection
 
-
+# TODO: Ability to add relationships without relationship string interpretation
+# TODO: Wrap model collections in a class such that __getitem__ will fullfill the relationship...
+# TODO: Inherit fields and relationships from super class
+# TODO: Automatically load class when relationship is fullfilled so you don't have to code in cls.load(r) in the Base class you use
 class MarshpillowError(Exception):
     """ Generic MarshpillowException """
+
 
 class MarshpillowInitializerError(Exception):
     """ Generic initializer exception """
 
+
+# TODO: Rename "RELATIONSHIPS", "FIELDS" to something shorter
+# TODO: Raw isn't loading for many fields.Nested relationships
 def validate_init(fxn):
     """ Raises errors for dynamically generated __init__ definitions """
 
@@ -61,7 +68,7 @@ def add_schema(cls, *args, **kwargs):
     """ Decorator that adds a dynamically generated schema to a model """
 
     # add model to Base.models
-    Base.models[cls.__name__] = cls
+    MarshpillowBase.models[cls.__name__] = cls
 
     # automatically generated Schema
     class ModSchema(BaseSchema):
@@ -80,35 +87,43 @@ def add_schema(cls, *args, **kwargs):
             self._load_one_and_many()
 
         def _save_relationship(self, relation):
-            self.__class__.relationships[relation.attribute] = relation
-            if relation.with_reference not in self.fields:
-                self.fields[relation.with_reference] = fields.Raw()
+            self.__class__.relationships[relation.name] = relation
+            if relation.attr1 not in self.fields:
+                self.fields[relation.attr1] = fields.Raw()
 
         def _attach_model_to_relation(self, relation):
-            if type(relation.with_model) is str:
-                relation.with_model = cls.get_model_by_name(relation.with_model)
+            if type(relation.mod2) is str:
+                relation.mod2 = cls.get_model_by_name(relation.mod2)
 
         def _load_one_and_many(self):
             """ create nested fields from ONE and MANY """
+            """
+                Types of relationships:
+                    ["Address"]
+                    SmartRelation(mod1, attr1, etc.)
+            """
             if hasattr(cls, "RELATIONSHIPS"):
                 for relation in cls.RELATIONSHIPS:
+                    model = None
+                    attribute_name = None
                     many = False
-                    model_name = relation
-                    if issubclass(relation.__class__, Relationship):
-                        model_name = relation.with_model
+                    if type(relation) is str:
+                        attribute_name = relation
+                        model = cls.get_model_by_name(attribute_name)
+                    elif issubclass(relation.__class__, Relationship):
                         self._attach_model_to_relation(relation)
                         self._save_relationship(relation)
-                        if type(relation) is HasMany or type(relation) is Association:
+                        if relation.many:
                             many = True
-                    schema = cls.get_model_by_name(model_name).Schema
-                    self.fields[model_name] = fields.Nested(schema, many=many)
+                        model = relation.mod2
+                        attribute_name = relation.name
+                    self.fields[inflection.underscore(attribute_name)] = fields.Nested(model.Schema, many=many)
 
         def _clone_fields_from_model(self, model):
             """ Clone fields defined in model to model.Schema """
             for field_name, field in model.model_fields():
                 self.fields[field_name] = field
 
-        # TODO: if ok to leave un-marshalled, then try to fullfill the promise when called?
         @post_load
         def make(self, data):
             try:
@@ -123,52 +138,66 @@ def add_schema(cls, *args, **kwargs):
     return cls
 
 
-class Base(object):
+class MarshpillowBase(object):
     """ Basic model for api items """
 
     Schema = None
     models = {}
+    unmarshall = "_unmarshall"
 
     @validate_init
     def __init__(self, *args, **kwargs):
         vars(self).update(kwargs)
         self.raw = None
         self.__class__.check_for_schema()
+        self._unmarshall = False
 
     @classmethod
     def check_for_schema(cls):
         if not hasattr(cls, "Schema") or cls.Schema is None:
             raise MarshpillowError("Schema not found. @add_schema may not have been added to class definition.")
 
+    def __getattribute__(self, name):
+        schema_cls = object.__getattribute__(self, "Schema")
+        unmarshal = object.__getattribute__(self, "_unmarshall")
+        x = object.__getattribute__(self, name)
+        if name in schema_cls.relationships:
+            if unmarshal:
+                r = schema_cls.relationships[name]
+                if type(x) is r.mod2:
+                    return x
+                else:
+                    new_x = self.fullfill_relationship(name)
+                    if new_x is not None and new_x != []:
+                        x = new_x
+        return x
+
     def __getattr__(self, name, saveattr=False):
         # print("Getting {} from {}".format(name, self.__class__.__name__))
-        if name not in vars(self):
-            # print("{} not in object".format(name))
-            if self._has_relationship(name):
-                # print("fullfilling relationship...")
-                v = self.fullfill_relationship(name)
-                if saveattr:
-                    setattr(self, name, v)
-                return v
-        v = super().__get_attribute__()
-        if self._has_relationship(name):
-            r = self._get_relationship(name)
-            fxn = r._get_function()
-            # TODO: Try to unmarshall if its something like "sequences": {"id"}
+        schema_cls = object.__getattribute__(self, "Schema")
+
+        if name in schema_cls.relationships:
+            # print("fullfilling relationship...")
+            v = self.fullfill_relationship(name)
+            if saveattr:
+                setattr(self, name, v)
+            return v
+        v = object.__getattribute__(self, name)
         return v
 
-    # TODO: allow ability to get and fullfill multiple relationships
     def _get_relationship(self, name):
         return self.Schema.relationships[name]
 
     def _has_relationship(self, name):
-        return name in self.Schema.relationships
+        schema_cls = object.__getattribute__(self, "Schema")
+        return name in schema_cls.relationships
 
     @classmethod
     def model_fields(cls):
         members = inspect.getmembers(cls, lambda a: not (inspect.isroutine(a)))
         return [m for m in members if issubclass(m[1].__class__, fields.Field)]
 
+    # TODO: Propogate attributes
     def fullfill_relationship(self, relationship_name):
         """
         Fullfills a relationship using "using", "ref", "fxn."
@@ -177,10 +206,13 @@ class Base(object):
             Promise("sample_type", <SampleType>, "sample_type_id", "find")
         """
         relationship = self._get_relationship(relationship_name)
-        return relationship.fullfill(self)
+        self._lock_unmarshalling()
+        x = relationship.fullfill(self)
+        self._unlock_unmarshalling()
+        return x
 
     # def _parse_model_from_name(self, name):
-    #     model_name = utils.snake_to_camel(name)
+    #     model_name = inflection.camelize(name)
     #     model = Base.models[model_name]
     #     model_id = getattr(self, name+"_id")
     #     m = model.find(model_id)
@@ -200,7 +232,7 @@ class Base(object):
     @classmethod
     def get_model_by_name(cls, name):
         """ Converts a snake_case model name to the model object """
-        model_name = utils.snake_to_camel(name)  # class name of the model to use
+        model_name = inflection.camelize(name)  # class name of the model to use
         model = cls.models[model_name]
         return model
 
@@ -212,17 +244,25 @@ class Base(object):
             return {}
 
     @classmethod
-    def json_to_model(cls, result):
-        m = cls.to_model(result)
-        m.raw = result
+    def json_to_model(cls, data):
+        m = cls.to_model(data)
+        m.raw = data
+        cls._unlock_unmarshalling(m)
         return m
 
     @classmethod
-    def json_to_models(cls, result):
-        m = cls.to_model(result, {"many": True})
-        for r, model in zip(result, m):
+    def json_to_models(cls, data):
+        m = cls.to_model(data, {"many": True})
+        for r, model in zip(data, m):
             model.raw = r
+            cls._unlock_unmarshalling(model)
         return m
+
+    def _lock_unmarshalling(self):
+        object.__setattr__(self, MarshpillowBase.unmarshall, False)
+
+    def _unlock_unmarshalling(self):
+        object.__setattr__(self, MarshpillowBase.unmarshall, True)
 
     # def fullfill(self, name, relationship):
     #     if relationship.reference is None:
@@ -233,22 +273,24 @@ class Base(object):
 
     @classmethod
     def find(cls, id):
-        raise NotImplementedError("method \"find\" is not yet implemented for {0}. Find returns a single model from an "
-                                  "id.".format(cls.__name__))
+        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("find", cls.__name__))
 
     @classmethod
     def where(cls, *args, **kwargs):
-        raise NotImplementedError("method \"where\" is not yet implemented for {0}. Where returns multiple models "
-                                  "from a "
-                                  "query.".format(cls.__name__))
+        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("where", cls.__name__))
+
+    @classmethod
+    def all(cls):
+        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("all", cls.__name__))
 
     @classmethod
     def find_by_name(cls, name):
-        raise NotImplementedError("method \"find_by_name\" is not yet implemented for {0}. Where returns a single "
-                                  "model "
-                                  "from a "
-                                  "str.".format(cls.__name__))
+        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("find_by_name", cls.__name__))
 
+    def _propogate_attributes(self):
+        """ Propogates attributes forward for vanilla Marshmallow objects and fullfilled relationship """
+
+    # TODO: forward propogate properties if there is a relationship...from
     @classmethod
     def load(cls, data):
         """ Special load that will unmarshall dict objects or a list of dict objects """
@@ -259,3 +301,7 @@ class Base(object):
             return cls.json_to_model(data)
         else:
             raise MarshpillowError("Data not recognized. Supply a dict or list: \"{0}\"".format(data))
+
+    # TODO: Force unmarshalling of all or some of the relationships...
+    def force(self):
+        raise NotImplementedError("Force is not yet implemented")
