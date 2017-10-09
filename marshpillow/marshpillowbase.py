@@ -186,7 +186,7 @@ class MarshpillowBase(object):
         return self.Schema.relationships[name]
 
     def _has_relationship(self, name):
-        schema_cls = object.__getattribute__(self, "Schema")
+        schema_cls = object.___getattribute__(self, "Schema")
         return name in schema_cls.relationships
 
     @classmethod
