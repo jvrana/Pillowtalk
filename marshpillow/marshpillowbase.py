@@ -159,9 +159,9 @@ class MarshpillowBase(object):
 
     def __getattribute__(self, name):
         schema_cls = object.__getattribute__(self, "Schema")
-        unmarshal = object.__getattribute__(self, "_unmarshall")
         x = object.__getattribute__(self, name)
         if name in schema_cls.relationships:
+            unmarshal = object.__getattribute__(self, "_unmarshall")
             if unmarshal:
                 r = schema_cls.relationships[name]
                 if type(x) is r.mod2:
@@ -186,7 +186,7 @@ class MarshpillowBase(object):
         return self.Schema.relationships[name]
 
     def _has_relationship(self, name):
-        schema_cls = object.___getattribute__(self, "Schema")
+        schema_cls = object.__getattribute__(self, "Schema")
         return name in schema_cls.relationships
 
     @classmethod
@@ -289,7 +289,7 @@ class MarshpillowBase(object):
 
     def _add_promises(self):
         for name, relationship in self.__class__.Schema.relationships.items():
-            setattr(self, name, self._getattribute__(name))
+            setattr(self, name, self._get_relationship(name))
 
 
     # TODO: forward propogate properties if there is a relationship...from
