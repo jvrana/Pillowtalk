@@ -287,17 +287,27 @@ class MarshpillowBase(object):
     def _propogate_attributes(self):
         """ Propogates attributes forward for vanilla Marshmallow objects and fullfilled relationship """
 
+    def _add_promises(self):
+        for name, relationship in self.__class__.Schema.relationships.items():
+            setattr(self, name, self._getattribute__(name))
+
+
     # TODO: forward propogate properties if there is a relationship...from
     @classmethod
     def load(cls, data):
         """ Special load that will unmarshall dict objects or a list of dict objects """
         cls.check_for_schema()
+        models = None
         if type(data) is list:
-            return cls.json_to_models(data)
+            models = cls.json_to_models(data)
+            if len(models) > 0 and issubclass(models[0].__class__, MarshpillowBase):
+                [m._add_promises() for m in models]
+
         elif type(data) is dict:
-            return cls.json_to_model(data)
+            models = cls.json_to_model(data)
         else:
             raise MarshpillowError("Data not recognized. Supply a dict or list: \"{0}\"".format(data))
+        return models
 
     # TODO: Force unmarshalling of all or some of the relationships...
     def force(self):
