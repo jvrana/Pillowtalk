@@ -143,7 +143,7 @@ class MarshpillowBase(object):
 
     Schema = None
     models = {}
-    unmarshall = "_unmarshall"
+    UNMARSHALL = "_unmarshall"
 
     @validate_init
     def __init__(self, *args, **kwargs):
@@ -158,10 +158,11 @@ class MarshpillowBase(object):
             raise MarshpillowError("Schema not found. @add_schema may not have been added to class definition.")
 
     def __getattribute__(self, name):
-        schema_cls = object.__getattribute__(self, "Schema")
+        """ Called if attribute exists """
+        schema_cls = object.__getattribute__(self, Schema.__name__)
         x = object.__getattribute__(self, name)
         if name in schema_cls.relationships:
-            unmarshal = object.__getattribute__(self, "_unmarshall")
+            unmarshal = object.__getattribute__(self, MarshpillowBase.UNMARSHALL)
             if unmarshal:
                 r = schema_cls.relationships[name]
                 if type(x) is r.mod2:
@@ -173,7 +174,7 @@ class MarshpillowBase(object):
         return x
 
     def __getattr__(self, name, saveattr=False):
-        schema_cls = object.__getattribute__(self, "Schema")
+        schema_cls = object.__getattribute__(self, Schema.__name__)
         if name in schema_cls.relationships:
             v = self.fullfill_relationship(name)
             if saveattr:
@@ -186,7 +187,7 @@ class MarshpillowBase(object):
         return self.Schema.relationships[name]
 
     def _has_relationship(self, name):
-        schema_cls = object.__getattribute__(self, "Schema")
+        schema_cls = object.__getattribute__(self, Schema.__name__)
         return name in schema_cls.relationships
 
     @classmethod
@@ -256,10 +257,10 @@ class MarshpillowBase(object):
         return m
 
     def _lock_unmarshalling(self):
-        object.__setattr__(self, MarshpillowBase.unmarshall, False)
+        object.__setattr__(self, MarshpillowBase.UNMARSHALL, False)
 
     def _unlock_unmarshalling(self):
-        object.__setattr__(self, MarshpillowBase.unmarshall, True)
+        object.__setattr__(self, MarshpillowBase.UNMARSHALL, True)
 
     # def fullfill(self, name, relationship):
     #     if relationship.reference is None:
