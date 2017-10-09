@@ -173,11 +173,8 @@ class MarshpillowBase(object):
         return x
 
     def __getattr__(self, name, saveattr=False):
-        # print("Getting {} from {}".format(name, self.__class__.__name__))
         schema_cls = object.__getattribute__(self, "Schema")
-
         if name in schema_cls.relationships:
-            # print("fullfilling relationship...")
             v = self.fullfill_relationship(name)
             if saveattr:
                 setattr(self, name, v)
