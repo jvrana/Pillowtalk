@@ -2,6 +2,10 @@
 
 Automatically creates intuitive python interfaces for APIs. Marshpillow talks to APIs and handles all of the model relationships behind the scenes, providing a clean and easy-to-use interface for your models.
 
+# Why?
+
+While there are plenty of excellent libraries for creating APIs, creating interfaces for these APIs isn't entirely straightforward. Marshpillow cleanly captures the underlying database relationships APIs may be providing making it easy to write python models. It provides a interface for making intuitive live API calls using your python models.
+
 # Features
 
 ## Minimalistic models with relationships
