@@ -63,3 +63,5 @@ a = p.address
 assert type(a) is Address
 assert person.address_id == 4 # this wasn't defined explicitly but it is inferred from "address": {"id": 4}
 ```
+
+## More examples and magic to come!
