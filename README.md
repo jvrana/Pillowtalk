@@ -65,3 +65,11 @@ assert person.address_id == 4 # this wasn't defined explicitly but it is inferre
 ```
 
 ## More examples and magic to come!
+    Other things include:
+        * Magic chaining in relationships
+        * Session managing suggestions
+        * automatically creating model skeletons from list of JSON
+        * model relationships through associations
+        * examples of connecting to MySQL or SQLlite
+        * examples of using CLI through hug
+        
