@@ -8,7 +8,7 @@ While there are plenty of excellent libraries for creating APIs, but creating in
 
 In future versions, marshpillow will be able to create and update your code based on a list of JSON files and *guess* at the underlying relationships between models. From there, marshpillow will automatically generate or update python models. This means changes to some API can trigger an automatic update to your python interface to that API!
 
-# Features
+# Features and Examples
 
 ## Minimalistic models with relationships
 
