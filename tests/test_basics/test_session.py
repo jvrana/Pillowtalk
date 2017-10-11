@@ -61,6 +61,7 @@ def test_session_hook(fastfoodexample):
                 assert getattr(SessionManager.session, k) == v
 
 def test_session_close(fastfoodexample):
+    assert SessionManager.session is not None
     SessionManager.close()
     assert SessionManager.session is None
 
