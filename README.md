@@ -1,12 +1,12 @@
 # Marshpillow
 
-Automatically creates intuitive python interfaces for APIs. Marshpillow talks to APIs and handles all of the model relationships behind the scenes, providing a clean and easy-to-use interface for your models.
+Automatically creates intuitive python wrappers for APIs. Marshpillow talks to APIs and handles all of the model relationships behind the scenes, providing a clean and easy-to-use wrapper for your models.
 
 # Why?
 
-While there are plenty of excellent libraries for creating APIs, but creating intuitive interfaces for these APIs isn't entirely straightforward. Marshpillow cleanly captures the underlying database relationships APIs may be providing making it easy to write python models. It provides a interface for making intuitive live API calls using your python models and the underlying relationships you specified.
+While there are plenty of excellent libraries for creating APIs, but creating intuitive wrappers for these APIs isn't entirely straightforward. Marshpillow cleanly captures the underlying database relationships APIs may be providing making it easy to write python models. It provides a wrapper for making intuitive live API calls using your python models and the underlying relationships you specified.
 
-In future versions, marshpillow will be able to create and update your code based on a list of JSON files and *guess* at the underlying relationships between models. From there, marshpillow will automatically generate or update python models. This means changes to some API can trigger an automatic update to your python interface to that API!
+In future versions, marshpillow will be able to create and update your code based on a list of JSON files and *guess* at the underlying relationships between models. From there, marshpillow will automatically generate or update python models. This means changes to some API can trigger an automatic update to your python wrapper to that API!
 
 # Features and Examples
 
