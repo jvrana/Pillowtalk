@@ -1,6 +1,6 @@
 # Marshpillow
 
-Automatically creates intuitive python wrappers for APIs. Marshpillow talks to APIs and handles all of the model relationships behind the scenes, providing a clean and easy-to-use wrapper for your models.
+Creates intuitive python wrappers for APIs. Marshpillow talks to APIs and handles all of the model relationships behind the scenes, providing a clean and easy-to-use wrapper for your models.
 
 # Why?
 
