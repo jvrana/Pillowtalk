@@ -10,12 +10,11 @@ class SessionManagerHook(type):
         super(SessionManagerHook, cls).__init__(name, bases, clsdict)
 
     def __getattr__(cls, item):
-        sessions = cls.sessions
+        sessions = object.__getattribute__(cls, "sessions")
         if item in sessions:
             cls.set(item)
         else:
-            return getattr(cls, item)
-
+            return object.__getattribute__(cls, item)
 
 class SessionManager(object, metaclass=SessionManagerHook):
     """ Session manager """
@@ -24,7 +23,7 @@ class SessionManager(object, metaclass=SessionManagerHook):
     sessions = {}
 
     @classmethod
-    def create(cls, api_connector, *args, name=None, **kwargs):
+    def create_session(cls, api_connector, *args, name=None, **kwargs):
         cls.session = api_connector(*args, **kwargs)
         cls._add_session(cls.session, name)
 

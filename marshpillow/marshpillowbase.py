@@ -144,7 +144,7 @@ class MarshpillowBase(object):
 
     Schema = None
     models = {}
-    unmarshall = "_unmarshall"
+    UNMARSHALL = "_unmarshall"
 
     @validate_init
     def __init__(self, *args, **kwargs):
@@ -159,10 +159,11 @@ class MarshpillowBase(object):
             raise MarshpillowError("Schema not found. @add_schema may not have been added to class definition.")
 
     def __getattribute__(self, name):
-        schema_cls = object.__getattribute__(self, "Schema")
-        unmarshal = object.__getattribute__(self, "_unmarshall")
+        """ Called if attribute exists """
+        schema_cls = object.__getattribute__(self, Schema.__name__)
         x = object.__getattribute__(self, name)
         if name in schema_cls.relationships:
+            unmarshal = object.__getattribute__(self, MarshpillowBase.UNMARSHALL)
             if unmarshal:
                 r = schema_cls.relationships[name]
                 if type(x) is r.mod2:
@@ -174,7 +175,7 @@ class MarshpillowBase(object):
         return x
 
     def __getattr__(self, name, saveattr=False):
-        schema_cls = object.__getattribute__(self, "Schema")
+        schema_cls = object.__getattribute__(self, Schema.__name__)
         if name in schema_cls.relationships:
             v = self.fullfill_relationship(name)
             if saveattr:
@@ -187,7 +188,7 @@ class MarshpillowBase(object):
         return self.Schema.relationships[name]
 
     def _has_relationship(self, name):
-        schema_cls = object.__getattribute__(self, "Schema")
+        schema_cls = object.__getattribute__(self, Schema.__name__)
         return name in schema_cls.relationships
 
     @classmethod
@@ -257,10 +258,10 @@ class MarshpillowBase(object):
         return m
 
     def _lock_unmarshalling(self):
-        object.__setattr__(self, MarshpillowBase.unmarshall, False)
+        object.__setattr__(self, MarshpillowBase.UNMARSHALL, False)
 
     def _unlock_unmarshalling(self):
-        object.__setattr__(self, MarshpillowBase.unmarshall, True)
+        object.__setattr__(self, MarshpillowBase.UNMARSHALL, True)
 
     # def fullfill(self, name, relationship):
     #     if relationship.reference is None:
@@ -288,17 +289,27 @@ class MarshpillowBase(object):
     def _propogate_attributes(self):
         """ Propogates attributes forward for vanilla Marshmallow objects and fullfilled relationship """
 
+    def _add_promises(self):
+        for name, relationship in self.__class__.Schema.relationships.items():
+            setattr(self, name, self._get_relationship(name))
+
+
     # TODO: forward propogate properties if there is a relationship...from
     @classmethod
     def load(cls, data):
         """ Special load that will unmarshall dict objects or a list of dict objects """
         cls.check_for_schema()
+        models = None
         if type(data) is list:
-            return cls.json_to_models(data)
+            models = cls.json_to_models(data)
+            if len(models) > 0 and issubclass(models[0].__class__, MarshpillowBase):
+                [m._add_promises() for m in models]
+
         elif type(data) is dict:
-            return cls.json_to_model(data)
+            models = cls.json_to_model(data)
         else:
             raise MarshpillowError("Data not recognized. Supply a dict or list: \"{0}\"".format(data))
+        return models
 
     # TODO: Force unmarshalling of all or some of the relationships...
     def force(self):

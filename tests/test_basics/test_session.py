@@ -27,7 +27,7 @@ def fastfoodexample(API):
     ]
 
     for cred in credential_list:
-        SessionManager.create(API, **cred)
+        SessionManager.create_session(API, **cred)
     return credential_list
 
 def test_session_creator(API):
@@ -37,7 +37,7 @@ def test_session_creator(API):
         "home": "www.timmyhortons.can"
     }
 
-    SessionManager.create(API, **credentials)
+    SessionManager.create_session(API, **credentials)
     s = SessionManager.session
     assert type(s) is API
     for k, v in credentials.items():
