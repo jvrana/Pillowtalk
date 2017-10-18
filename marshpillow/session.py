@@ -14,7 +14,10 @@ class SessionManagerHook(type):
         if item in sessions:
             cls.set(item)
         else:
-            return object.__getattribute__(cls, item)
+            try:
+                return object.__getattribute__(cls, item)
+            except AttributeError:
+                return AttributeError("Session {0} not found. Select from {1}".format(item, sessions.keys()))
 
 class SessionManager(object, metaclass=SessionManagerHook):
     """ Session manager """
