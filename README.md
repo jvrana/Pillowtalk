@@ -1,3 +1,5 @@
+[![travis build](https://img.shields.io/travis/jvrana/Marshpillow.svg)](https://travis-ci.org/jvrana/Marshpillow)
+
 # Marshpillow
 
 Creates intuitive python wrappers for APIs. Marshpillow talks to APIs and handles all of the model relationships behind the scenes, providing a clean and easy-to-use wrapper for your models.
