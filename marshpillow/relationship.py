@@ -1,18 +1,8 @@
 import re
 
 
-# TODO: OneToMany
-# TODO: ManyToOne
-# TODO: OneToOne
-# TODO: ManyToMany
-# TODO: Make sure normal marshmallow relationships (self relationships for e.g.) can happen
-
-class RelationshipError(Exception):
-    """ Generic relationship error """
-
-
 class Relationship(object):
-    delim = "<>"
+    DELIM = "<>"
 
     def __init__(self, name, search_function, mod1, attr1, mod2, attr2, mod3=None, attr3=None, envelope=False,
                  many=False):
@@ -77,6 +67,7 @@ class Relationship(object):
         else:
             cls.get_chained(v, attributes[1:])
 
+
 class SmartRelationship(Relationship):
     def __init__(self, name, relation_str, envelope=False, many=False):
         fxn, model_attributes = self._parse_relationship_string(relation_str)
@@ -91,11 +82,11 @@ class SmartRelationship(Relationship):
         m = re.match("(?P<fxn>\w+)\s(?P<rel>.+)", s)
         if m is None:
             raise Exception("Unable to parse relationship. Relations must have the form \"fxn Model1.attr1 {0} "
-                            "Model2.attr2\". Found {1}".format(Relationship.delim, s))
+                            "Model2.attr2\". Found {1}".format(Relationship.DELIM, s))
         g = m.groupdict()
         fxn = g["fxn"]
         rel = g["rel"]
-        tokens = re.split("\s+{0}\s+".format(Relationship.delim), rel)  # split model and attributes
+        tokens = re.split("\s+{0}\s+".format(Relationship.DELIM), rel)  # split model and attributes
         if len(tokens) > 3 or len(tokens) < 2:
             raise Exception("Unable to parse relationship. Only 2 or 3 way relationships are allowed. Found {"
                             "0}".format(len(tokens)))

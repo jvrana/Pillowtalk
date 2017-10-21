@@ -2,6 +2,7 @@ import pytest
 from marshmallow.exceptions import *
 
 from marshpillow import *
+from marshpillow.schemas import BaseSchema, add_schema
 
 
 @pytest.fixture(scope="module")
@@ -157,6 +158,21 @@ def test_load_many(mybase):
 
     emails = Email.load(email_json)
     assert len(emails) == len(email_json)
+
+def test_additional_fields(mybase):
+
+    @add_schema
+    class Email(mybase):
+        items = []
+        FIELDS = ["id", "address"]
+        RELATIONSHIPS = [
+            One("person", "find Email.person_id <> Person.id")
+        ]
+
+    email_json = {"id": 4, "address": "jill@hill.org", "additional_field": 6}
+
+    email = Email.load(email_json)
+    print(email.additional_field)
 
 
     # assert p.description == person_data["description"]

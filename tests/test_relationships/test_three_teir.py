@@ -1,5 +1,8 @@
 import pytest
+
 from marshpillow import *
+from marshpillow.schemas import add_schema
+
 
 @pytest.fixture
 def models(mybase):

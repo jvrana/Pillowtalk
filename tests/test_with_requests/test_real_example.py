@@ -1,7 +1,10 @@
 import os
+
 import requests
+
 from marshpillow import *
-from marshmallow import pprint
+from marshpillow.schemas import add_schema
+
 
 def test_benchling_example():
     class BenchlingAPIException(Exception):

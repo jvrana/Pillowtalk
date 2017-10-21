@@ -51,3 +51,5 @@ crashlytics-build.properties
 fabric.properties
 
 .cache/*
+/tests/.cache/
+/.cache/

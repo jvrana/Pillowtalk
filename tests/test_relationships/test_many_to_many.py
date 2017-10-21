@@ -1,5 +1,6 @@
-import pytest
 from marshpillow import *
+from marshpillow.schemas import add_schema
+
 
 def test_basic(mybase):
 

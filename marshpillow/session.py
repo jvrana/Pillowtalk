@@ -2,6 +2,7 @@
 # TODO: Make sessions a dict of dict of classname and sessions
 # TODO: Test to make sure session and sessions aren't shared between Subclasses
 
+
 class SessionManagerHook(type):
     #
     def __init__(cls, name, bases, clsdict):
@@ -18,6 +19,7 @@ class SessionManagerHook(type):
                 return object.__getattribute__(cls, item)
             except AttributeError:
                 raise AttributeError("Session {0} not found. Select from {1}".format(item, sessions.keys()))
+
 
 class SessionManager(object, metaclass=SessionManagerHook):
     """ Session manager """

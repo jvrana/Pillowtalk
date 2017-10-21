@@ -9,5 +9,6 @@ setup(
         author='Justin Dane Vrana',
         author_email='justin.vrana@gmail.com',
         description='refactored trident',
-        install_requires=["inflection", "marshmallow"]
+        install_requires=["inflection", "marshmallow"],
+        tests_require=['pytest']
 )

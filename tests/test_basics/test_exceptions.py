@@ -1,5 +1,7 @@
 import pytest
-from marshpillow import *
+
+from marshpillow import MarshpillowError
+
 
 def test_exception(mybase):
 
