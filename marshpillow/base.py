@@ -30,6 +30,10 @@ class APIInterface(object):
     def find_by_name(cls, *args, **kwargs):
         raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("find_by_name", cls.__name__))
 
+    @classmethod
+    def update(cls, *args, **kwargs):
+        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("update", cls.__name__))
+
 
 class MarshpillowBase(APIInterface, object):
     """ Basic model for api items """
@@ -60,13 +64,14 @@ class MarshpillowBase(APIInterface, object):
         schema_cls = object.__getattribute__(self, Schema.__name__)
         if name in schema_cls.relationships:
             if object.__getattribute__(self, MarshpillowBase.UNMARSHALL):  # locking marshalling prevents recursion
+                # Decide to use original value or fullfilled value...
                 r = schema_cls.relationships[name]
                 if type(x) is r.mod2:  # if relationship is already fullfilled
                     return x
                 else:
                     new_x = self.fullfill_relationship(name)
                     if new_x is not None and new_x != [None] and new_x != []:
-                        x = new_x
+                        return new_x
         if issubclass(x.__class__, Relationship):
             raise TypeError("Relationship \"name\" was not correctly resolved.")
         return x
