@@ -9,7 +9,7 @@ setup(
         author='Justin Dane Vrana',
         author_email='justin.vrana@gmail.com',
         description='refactored trident',
-        install_requires=["inflection", "marshmallow"],
+        install_requires=["inflection", "marshmallow", "requests"],
         tests_require=['pytest'],
         setup_requires=[
             'pytest-runner',
