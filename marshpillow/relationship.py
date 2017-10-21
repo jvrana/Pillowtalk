@@ -3,6 +3,7 @@ import re
 
 class Relationship(object):
     DELIM = "<>"
+    RELATIONSHIP_FIELD_NAME = "RELATIONSHIPS"
 
     def __init__(self, name, search_function, mod1, attr1, mod2, attr2, mod3=None, attr3=None, envelope=False,
                  many=False):

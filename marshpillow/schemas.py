@@ -1,6 +1,7 @@
 import inflection
 from marshmallow import SchemaOpts, Schema, fields, post_load
-from marshpillow import MarshpillowBase, Relationship
+from marshpillow.base import MarshpillowBase
+from marshpillow.relationship import Relationship
 from marshpillow.exceptions import MarshpillowInitializerError
 
 
@@ -60,7 +61,7 @@ def add_schema(cls, *args, **kwargs):
                     ["Address"]
                     SmartRelation(mod1, attr1, etc.)
             """
-            if hasattr(cls, "RELATIONSHIPS"):
+            if hasattr(cls, Relationship.RELATIONSHIP_FIELD_NAME):
                 for relation in cls.RELATIONSHIPS:
                     model = None
                     attribute_name = None

@@ -102,7 +102,8 @@ class SampleType(AqBase):
 class User(AqBase):
     FIELDS = ["name", "id"]
 
-Session.create_session("vrana", "Mountain5", "http://52.27.43.242:81/")
+
+Session._create_with_connector(,,, "vrana", "Mountain5", "http://52.27.43.242:81/"
 
 s = Sample.find(1111)
 print(s)

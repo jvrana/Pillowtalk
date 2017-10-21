@@ -1,6 +1,7 @@
 import inspect
 
 import inflection
+from marshpillow.relationship import Relationship
 from marshmallow import Schema, fields
 from marshpillow.exceptions import MarshpillowError
 from marshpillow.utils import validate_init
@@ -53,8 +54,10 @@ class MarshpillowBase(APIInterface, object):
     def __getattribute__(self, name):
         """ Override for attributes. If attribute is found and attribute is a relationship, an attempt to fullfill
          the relationship will be made. """
-        schema_cls = object.__getattribute__(self, Schema.__name__)
         x = object.__getattribute__(self, name)
+        if name.startswith("_"):
+            return x
+        schema_cls = object.__getattribute__(self, Schema.__name__)
         if name in schema_cls.relationships:
             if object.__getattribute__(self, MarshpillowBase.UNMARSHALL):  # locking marshalling prevents recursion
                 r = schema_cls.relationships[name]
@@ -62,8 +65,10 @@ class MarshpillowBase(APIInterface, object):
                     return x
                 else:
                     new_x = self.fullfill_relationship(name)
-                    if new_x is not None and new_x != []:
+                    if new_x is not None and new_x != [None]:
                         x = new_x
+        if issubclass(x.__class__, Relationship):
+            raise TypeError("Relationship \"name\" was not correctly resolved.")
         return x
 
     def __getattr__(self, name, saveattr=False):
@@ -155,10 +160,10 @@ class MarshpillowBase(APIInterface, object):
         """ unlocks model so relationships can be fullfilled. """
         object.__setattr__(self, MarshpillowBase.UNMARSHALL, True)
 
-    def _add_relationships(self):
-        """ Copies relationship found in the Schema to this instance """
-        for name, relationship in self.__class__.Schema.relationships.items():
-            setattr(self, name, self._get_relationship(name))
+    # def _add_relationships(self):
+    #     """ Copies relationship found in the Schema to this instance """
+    #     for name, relationship in self.__class__.Schema.relationships.items():
+    #         setattr(self, name, self._get_relationship(name))
 
     @classmethod
     def set_additional_fields(cls, model, data):
@@ -175,9 +180,8 @@ class MarshpillowBase(APIInterface, object):
         models = None
         if type(data) is list:
             models = cls.json_to_models(data)
-            if len(models) > 0 and issubclass(models[0].__class__, MarshpillowBase):
-                [m._add_relationships() for m in models]
-
+            # if len(models) > 0 and issubclass(models[0].__class__, MarshpillowBase):
+            #     # [m._add_relationships() for m in models]
         elif type(data) is dict:
             models = cls.json_to_model(data)
         else:

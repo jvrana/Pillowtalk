@@ -18,7 +18,12 @@ class SessionManagerHook(type):
             try:
                 return object.__getattribute__(cls, item)
             except AttributeError:
-                raise AttributeError("Session {0} not found. Select from {1}".format(item, sessions.keys()))
+                msg = "Attribute \"{0}\" not found.".format(item)
+                if sessions is None or sessions == []:
+                    msg += " There are no sessions available."
+                else:
+                    msg += " Available sessions: {0}.".format(sessions.keys())
+                raise AttributeError(msg)
 
 
 class SessionManager(object, metaclass=SessionManagerHook):
@@ -28,9 +33,14 @@ class SessionManager(object, metaclass=SessionManagerHook):
     sessions = {}
 
     @classmethod
-    def create_session(cls, api_connector, *args, name=None, **kwargs):
+    def create(cls, *args, session_name=None, **kwargs):
+        cls._create_with_connector(cls, *args, session_name=session_name, **kwargs)
+
+    @classmethod
+    def _create_with_connector(cls, api_connector, *args, session_name=None, **kwargs):
         cls.session = api_connector(*args, **kwargs)
-        cls._add_session(cls.session, name)
+        cls._add_session(cls.session, session_name)
+        cls.set(session_name)
 
     @classmethod
     def _add_session(cls, api_connector, name):
@@ -38,8 +48,7 @@ class SessionManager(object, metaclass=SessionManagerHook):
 
     @classmethod
     def set(cls, name):
-        sessions = cls.sessions
-        cls.session = sessions[name]
+        cls.session = cls.sessions[name]
 
     @classmethod
     def session_name(cls):
@@ -50,3 +59,5 @@ class SessionManager(object, metaclass=SessionManagerHook):
     @classmethod
     def close(cls):
         cls.session = None
+
+
