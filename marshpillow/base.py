@@ -10,8 +10,8 @@ from marshpillow.utils import validate_init
 # TODO: Wrap model collections in a class such that __getitem__ will fullfill the relationship...
 # TODO: Inherit fields and relationships from super class
 # TODO: Automatically load class when relationship is fullfilled so you don't have to code in cls.load(r) in the Base class you use
-
-
+# TODO: partially unmarshalled lists, when calling [i] is will update the object on the fly...
+# TODO: needs to know when object is deserialized completely.
 
 class APIInterface(object):
     @classmethod
@@ -30,8 +30,8 @@ class APIInterface(object):
     def find_by_name(cls, *args, **kwargs):
         raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("find_by_name", cls.__name__))
 
-    @classmethod
     def update(cls, *args, **kwargs):
+        # self.__dict__.update(self.__class__.find(self.id).__dict__)
         raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("update", cls.__name__))
 
 
@@ -84,8 +84,14 @@ class MarshpillowBase(APIInterface, object):
             if saveattr:
                 setattr(self, name, v)
             return v
+        # TODO: if attribute doesn't exist, attempt to update from database
         v = object.__getattribute__(self, name)
         return v
+
+    # TODO: update ("update with id") or ("update with find name or id")
+    # TODO: raise warning if there is not update
+    def update(self):
+        raise NotImplementedError("Update is not yet implemented. Try to use API wrapper first.")
 
     def _get_relationship(self, name):
         return self.Schema.relationships[name]
