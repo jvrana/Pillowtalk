@@ -199,6 +199,10 @@ class MarshpillowBase(APIInterface, object):
             raise MarshpillowError("Data not recognized. Supply a dict or list: \"{0}\"".format(data))
         return models
 
+    def dump(self):
+        s = self.__class__.Schema()
+        return s.dump(self).data
+
     # TODO: Force unmarshalling of all or some of the relationships...
     def force(self):
         raise NotImplementedError("Force is not yet implemented")

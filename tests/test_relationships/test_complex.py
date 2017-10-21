@@ -73,6 +73,8 @@ def test(mybase):
 
     assert len(jill.budgets) == 2
 
+    pprint(jill.dump())
+
 
 
 
