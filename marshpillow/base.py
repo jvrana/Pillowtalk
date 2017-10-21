@@ -65,7 +65,7 @@ class MarshpillowBase(APIInterface, object):
                     return x
                 else:
                     new_x = self.fullfill_relationship(name)
-                    if new_x is not None and new_x != [None]:
+                    if new_x is not None and new_x != [None] and new_x != []:
                         x = new_x
         if issubclass(x.__class__, Relationship):
             raise TypeError("Relationship \"name\" was not correctly resolved.")

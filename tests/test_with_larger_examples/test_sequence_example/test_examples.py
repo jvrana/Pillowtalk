@@ -1,6 +1,9 @@
 import pytest
 from marshpillow import *
 
+# TODO: test when where returns [] or None or [None]
+# TODO: test update() (or autoupdate?)
+
 @pytest.fixture
 def folder_json():
     return {'count'                                                                             : 59,
