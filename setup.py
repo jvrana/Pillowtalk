@@ -12,6 +12,6 @@ setup(
         install_requires=["inflection", "marshmallow"],
         tests_require=['pytest'],
         setup_requires=[
-            'pytest-runner',
+            'pytest-runner', 'python-coveralls', 'pytest-pep8'
         ],
 )

@@ -9,4 +9,8 @@ python:
   - "nightly"
 install:
   - "pip install ."
-script: pytest -q
+before_script:
+script:
+  - pytest  --cov --cov-report term-missing
+after_success:
+  - coveralls
