@@ -1,10 +1,11 @@
 import os
+import re
 from distutils.core import setup
 
-
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
+# about
+__author__ = 'Justin Dane Vrana'
+__license__ = 'MIT'
+__package__ = "marshpillow"
 
 tests_require = [
     'pytest',
@@ -40,17 +41,35 @@ classifiers = [
                   "Programming Language:: Python:: 3.7",
               ],
 
+# setup functions
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
+def get_property(prop, project):
+    result = re.search(r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format(prop), open(project + '/__init__.py').read())
+    if result:
+        return result.group(1)
+    else:
+        raise RuntimeError("Unable to find property {0} in project \"{1}\".".format(prop, project))
+
+def get_version():
+    try:
+        return get_property("__version__", __package__)
+    except RuntimeError as e:
+        raise RuntimeError("Unable to find __version__ string in project \"{0}\"".format(__package__))
+
+# setup
 setup(
-        name='marshpillow',
-        version='1.0',
-        packages=['marshpillow'],
+        name=__package__,
+        version=get_version(),
+        packages=[__package__],
         url='https://github.com/jvrana/marshpillow',
-        license='MIT',
-        author='Justin Dane Vrana',
+        license=__license__,
+        author=__author__,
         author_email='justin.vrana@gmail.com',
         keywords='serialization marshmallow deserialization orm api-wrapper api',
         description='Intuitive API wrapper framework using marshmallow',
-        long_description=read('README.md'),
+        long_description=read('README.rst'),
         install_requires=install_requires,
         python_requires='>=3.4',
         tests_require=tests_require,

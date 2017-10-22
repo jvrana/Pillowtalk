@@ -1,3 +1,5 @@
+__version__ = "1.0.dev1"
+
 from .base import *
 from .schemas import *
 from .relationship import *
