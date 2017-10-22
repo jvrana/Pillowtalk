@@ -54,3 +54,5 @@ fabric.properties
 .cache/*
 /tests/.cache/
 /.cache/
+htmlcov/*
+.coverage
