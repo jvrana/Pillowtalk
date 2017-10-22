@@ -1,6 +1,6 @@
 import pytest
 
-from marshpillow import *
+from pillowtalk import *
 
 
 @pytest.fixture

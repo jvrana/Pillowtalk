@@ -56,3 +56,5 @@ fabric.properties
 /.cache/
 htmlcov/*
 .coverage
+*.pyc
+__pycache__

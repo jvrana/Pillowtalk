@@ -1,5 +1,5 @@
 import pytest
-from marshpillow import *
+from pillowtalk import *
 
 # TODO: test when where returns [] or None or [None]
 # TODO: test update() (or autoupdate?)

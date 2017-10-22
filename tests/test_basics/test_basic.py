@@ -1,8 +1,8 @@
 import pytest
 from marshmallow.exceptions import *
 
-from marshpillow import *
-from marshpillow.schemas import BaseSchema, add_schema
+from pillowtalk import *
+from pillowtalk.schemas import BaseSchema, add_schema
 
 
 @pytest.fixture(scope="module")

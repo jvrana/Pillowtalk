@@ -1,5 +1,5 @@
-from marshpillow import *
-from marshpillow.schemas import add_schema
+from pillowtalk import *
+from pillowtalk.schemas import add_schema
 
 
 def test(mybase):
