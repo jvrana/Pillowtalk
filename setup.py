@@ -6,7 +6,7 @@ from distutils.core import setup
 __author__ = 'Justin Dane Vrana'
 __license__ = 'MIT'
 __package__ = "pillowtalk"
-__readme__ = "README.rst"
+__readme__ = "README"
 
 tests_require = [
     'pytest',
@@ -36,10 +36,10 @@ classifiers = [
 
                   # Specify the Python versions you support here. In particular, ensure
                   # that you indicate whether you support Python 2, Python 3 or both.
-                  "Programming Language:: Python:: 3.4",
-                  "Programming Language:: Python:: 3.5",
-                  "Programming Language:: Python:: 3.6",
-                  "Programming Language:: Python:: 3.7",
+                  "Programming Language :: Python:: 3.4",
+                  "Programming Language :: Python:: 3.5",
+                  "Programming Language :: Python:: 3.6",
+                  "Programming Language :: Python:: 3.7",
               ],
 
 # setup functions
