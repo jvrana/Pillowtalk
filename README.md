@@ -7,7 +7,7 @@
 
 Creates intuitive python wrappers for APIs. Marshpillow talks to APIs and handles all of the model relationships behind the scenes, providing a clean and easy-to-use wrapper for your models.
 
-# Why?
+# Why another package?
 
 While there are plenty of excellent libraries for creating APIs, but creating intuitive wrappers for these APIs isn't entirely straightforward. Marshpillow cleanly captures the underlying database relationships APIs may be providing making it easy to write python models. It provides a wrapper for making intuitive live API calls using your python models and the underlying relationships you specified.
 
