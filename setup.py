@@ -69,7 +69,7 @@ setup(
         author_email='justin.vrana@gmail.com',
         keywords='serialization marshmallow deserialization orm api-wrapper api',
         description='Intuitive API wrapper framework using marshmallow',
-        long_description=read('README.rst'),
+        long_description=read('README.md'),
         install_requires=install_requires,
         python_requires='>=3.4',
         tests_require=tests_require,

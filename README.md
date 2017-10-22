@@ -1,4 +1,5 @@
 [![travis build](https://img.shields.io/travis/jvrana/Marshpillow.svg)](https://travis-ci.org/jvrana/Marshpillow)
+[![Coverage Status](https://coveralls.io/repos/github/jvrana/Marshpillow/badge.svg?branch=master)](https://coveralls.io/github/jvrana/Marshpillow?branch=master)
 
 # Marshpillow
 
