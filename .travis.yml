@@ -10,6 +10,8 @@ python:
 install:
 - pip install .
 before_install:
+- pip install pyandoc
+- pandoc --from=markdown --to=rst --output=README.rst README.md
 - pip install pytest pytest-cov
 - pip install coveralls
 script:

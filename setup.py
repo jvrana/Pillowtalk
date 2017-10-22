@@ -6,6 +6,7 @@ from distutils.core import setup
 __author__ = 'Justin Dane Vrana'
 __license__ = 'MIT'
 __package__ = "marshpillow"
+__readme__ = "README.rst"
 
 tests_require = [
     'pytest',
@@ -69,7 +70,7 @@ setup(
         author_email='justin.vrana@gmail.com',
         keywords='serialization marshmallow deserialization orm api-wrapper api',
         description='Intuitive API wrapper framework using marshmallow',
-        long_description=read('README.md'),
+        long_description=read(__readme__),
         install_requires=install_requires,
         python_requires='>=3.4',
         tests_require=tests_require,
