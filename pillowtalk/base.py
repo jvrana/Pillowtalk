@@ -1,10 +1,10 @@
 import inspect
 
 import inflection
-from marshpillow.relationship import Relationship
+from pillowtalk.relationship import Relationship
 from marshmallow import Schema, fields
-from marshpillow.exceptions import MarshpillowError
-from marshpillow.utils import validate_init
+from pillowtalk.exceptions import MarshpillowError
+from pillowtalk.utils import validate_init
 
 # TODO: Ability to add relationships without relationship string interpretation
 # TODO: Wrap model collections in a class such that __getitem__ will fullfill the relationship...

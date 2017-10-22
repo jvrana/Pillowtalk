@@ -1,5 +1,5 @@
 from marshmallow import post_load
-from marshpillow import *
+from pillowtalk import *
 
 
 def test_basic_schema():

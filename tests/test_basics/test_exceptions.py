@@ -1,6 +1,6 @@
 import pytest
 
-from marshpillow import MarshpillowError
+from pillowtalk import MarshpillowError
 
 
 def test_exception(mybase):

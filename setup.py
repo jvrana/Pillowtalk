@@ -5,7 +5,7 @@ from distutils.core import setup
 # about
 __author__ = 'Justin Dane Vrana'
 __license__ = 'MIT'
-__package__ = "marshpillow"
+__package__ = "pillowtalk"
 __readme__ = "README.rst"
 
 tests_require = [
@@ -64,7 +64,7 @@ setup(
         name=__package__,
         version=get_version(),
         packages=[__package__],
-        url='https://github.com/jvrana/marshpillow',
+        url='https://github.com/jvrana/pillowtalk',
         license=__license__,
         author=__author__,
         author_email='justin.vrana@gmail.com',

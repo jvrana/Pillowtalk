@@ -1,4 +1,4 @@
-from marshpillow.exceptions import MarshpillowInitializerError
+from pillowtalk.exceptions import MarshpillowInitializerError
 
 
 def validate_init(fxn):

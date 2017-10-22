@@ -1,7 +1,7 @@
 import pytest
 
-from marshpillow import *
-from marshpillow.schemas import add_schema
+from pillowtalk import *
+from pillowtalk.schemas import add_schema
 
 
 @pytest.fixture

@@ -1,8 +1,8 @@
 import inflection
 from marshmallow import SchemaOpts, Schema, fields, post_load
-from marshpillow.base import MarshpillowBase
-from marshpillow.relationship import Relationship
-from marshpillow.exceptions import MarshpillowInitializerError
+from pillowtalk.base import MarshpillowBase
+from pillowtalk.relationship import Relationship
+from pillowtalk.exceptions import MarshpillowInitializerError
 
 
 class BaseSchemaOpts(SchemaOpts):
