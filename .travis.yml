@@ -16,7 +16,7 @@ before_install:
 after_install:
 - pandoc --from=markdown --to=rst --output=README.rst README.md
 script:
-- py.test
+- py.test --cov marshpillow --cov-report term-missing
 after_success:
 - coveralls
 deploy:
