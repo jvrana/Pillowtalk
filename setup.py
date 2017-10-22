@@ -74,5 +74,4 @@ setup(
         install_requires=install_requires,
         python_requires='>=3.4',
         tests_require=tests_require,
-        classifiers=classifiers
 )
