@@ -11,6 +11,6 @@ install:
   - "pip install ."
 before_script:
 script:
-  - pytest  --cov --cov-report term-missing
+  - pytest --cov-report html --cov marshpillow --verbose
 after_success:
   - coveralls
