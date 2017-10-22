@@ -8,10 +8,7 @@ setup(
         license='',
         author='Justin Dane Vrana',
         author_email='justin.vrana@gmail.com',
-        description='refactored trident',
+        description='Intuitive API wrapper framework using marshmallow',
         install_requires=["inflection", "marshmallow"],
-        tests_require=['pytest'],
-        setup_requires=[
-            'pytest-runner', 'python-coveralls', 'pytest-pep8'
-        ],
+        tests_require=['pytest', 'pytest-runner', 'python-coveralls', 'pytest-pep8'],
 )
