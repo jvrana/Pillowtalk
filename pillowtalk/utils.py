@@ -1,4 +1,4 @@
-from pillowtalk.exceptions import MarshpillowInitializerError
+from pillowtalk.exceptions import PillowtalkInitializerError
 
 
 def validate_init(fxn):
@@ -17,12 +17,12 @@ def validate_init(fxn):
             field_dict[f] = a
         for k, v in kwargs.items():
             if k in field_dict:
-                raise MarshpillowInitializerError("Got multiple values for {0}".format(k))
+                raise PillowtalkInitializerError("Got multiple values for {0}".format(k))
             else:
                 field_dict[k] = v
         for f in fields:
             if f not in field_dict.keys():
-                raise MarshpillowInitializerError("Missing argument for {0}".format(f))
+                raise PillowtalkInitializerError("Missing argument for {0}".format(f))
         return fxn(self, (), **field_dict)
 
     return wrapped

@@ -2,7 +2,7 @@ import inflection
 from marshmallow import SchemaOpts, Schema, fields, post_load
 from pillowtalk.base import MarshpillowBase
 from pillowtalk.relationship import Relationship
-from pillowtalk.exceptions import MarshpillowInitializerError
+from pillowtalk.exceptions import PillowtalkInitializerError
 
 
 class BaseSchemaOpts(SchemaOpts):
@@ -88,7 +88,7 @@ def add_schema(cls, *args, **kwargs):
             try:
                 model = cls(**data)
                 return model
-            except MarshpillowInitializerError as e:
+            except PillowtalkInitializerError as e:
                 pass
 
     # end of ModeSchema

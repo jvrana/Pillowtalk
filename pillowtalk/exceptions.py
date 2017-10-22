@@ -1,8 +1,8 @@
-class MarshpillowError(Exception):
+class PillowtalkError(Exception):
     """ Generic MarshpillowException """
 
 
-class MarshpillowInitializerError(Exception):
+class PillowtalkInitializerError(Exception):
     """ Generic initializer exception """
 
 

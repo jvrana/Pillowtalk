@@ -3,7 +3,7 @@ import inspect
 import inflection
 from pillowtalk.relationship import Relationship
 from marshmallow import Schema, fields
-from pillowtalk.exceptions import MarshpillowError
+from pillowtalk.exceptions import PillowtalkError
 from pillowtalk.utils import validate_init
 
 # TODO: Ability to add relationships without relationship string interpretation
@@ -53,7 +53,7 @@ class MarshpillowBase(APIInterface, object):
     def check_for_schema(cls):
         """ Checks to see if class has a Schema """
         if not hasattr(cls, "Schema") or cls.Schema is None:
-            raise MarshpillowError("Schema not found. @add_schema may not have been added to class definition.")
+            raise PillowtalkError("Schema not found. @add_schema may not have been added to class definition.")
 
     def __getattribute__(self, name):
         """ Override for attributes. If attribute is found and attribute is a relationship, an attempt to fullfill
@@ -196,7 +196,7 @@ class MarshpillowBase(APIInterface, object):
         elif type(data) is dict:
             models = cls.json_to_model(data)
         else:
-            raise MarshpillowError("Data not recognized. Supply a dict or list: \"{0}\"".format(data))
+            raise PillowtalkError("Data not recognized. Supply a dict or list: \"{0}\"".format(data))
         return models
 
     def dump(self):
