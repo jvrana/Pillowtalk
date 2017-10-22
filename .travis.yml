@@ -14,7 +14,7 @@ before_install:
 - pip install pytest pytest-cov
 - pip install coveralls
 after_install:
-- pandoc --from=markdown --to=rst --output=README.rst README.md
+- pandoc --from=markdown --to=rst --output=README README.md
 script:
 - py.test --cov pillowtalk --cov-report term-missing
 after_success:

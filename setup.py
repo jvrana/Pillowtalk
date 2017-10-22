@@ -6,7 +6,7 @@ from distutils.core import setup
 __author__ = 'Justin Dane Vrana'
 __license__ = 'MIT'
 __package__ = "pillowtalk"
-__readme__ = "README.rst"
+__readme__ = "README"
 
 tests_require = [
     'pytest',
