@@ -9,8 +9,10 @@ python:
   - "nightly"
 install:
   - "pip install ."
-before_script:
+before_install:
+  - pip install pytest pytest-cov
+  - pip install coveralls
 script:
-  - pytest --cov . --cov-report term-missing --pep8 .
+  - py.test
 after_success:
   - coveralls
