@@ -1,6 +1,6 @@
 [![travis build](https://img.shields.io/travis/jvrana/Pillowtalk.svg)](https://travis-ci.org/jvrana/Pillowtalk)
 [![Coverage Status](https://coveralls.io/repos/github/jvrana/Pillowtalk/badge.svg?branch=master)](https://coveralls.io/github/jvrana/Pillowtalk?branch=master)
-
+[![PyPI version](https://badge.fury.io/py/pillowtalk.svg)](https://badge.fury.io/py/pillowtalk)
 
 ![pillow_talk_icon](images/pillowtalk_icon_medium.png?raw=true)
 # **Pillowtalk**
