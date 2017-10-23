@@ -3,6 +3,13 @@
 [![PyPI version](https://badge.fury.io/py/pillowtalk.svg)](https://badge.fury.io/py/pillowtalk)
 
 ![pillow_talk_icon](images/pillowtalk_icon_medium.png?raw=true)
+
+#### Build/Coverage Status
+Branch | Build | Coverage
+:---: | :---: | :---:
+**master** | [![travis build](https://img.shields.io/travis/jvrana/pillowtalk/master.svg)](https://travis-ci.org/jvrana/pillowtalk/master) | [![Coverage Status](https://coveralls.io/repos/github/jvrana/pillowtalk/badge.svg?branch=master)](https://coveralls.io/github/jvrana/pillowtalk?branch=master)
+**development** | [![travis build](https://img.shields.io/travis/jvrana/pillowtalk/development.svg)](https://travis-ci.org/jvrana/pillowtalk/development) | [![Coverage Status](https://coveralls.io/repos/github/jvrana/pillowtalk/badge.svg?branch=development)](https://coveralls.io/github/jvrana/pillowtalk?branch=development)
+
 # **Pillowtalk**
 
 Creates intuitive python wrappers for APIs. **Pillowtalk** talks to APIs and handles all of the model relationships behind the scenes, providing a clean and easy-to-use wrapper for your models.
