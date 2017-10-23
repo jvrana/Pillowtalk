@@ -1,6 +1,6 @@
 import inflection
 from marshmallow import SchemaOpts, Schema, fields, post_load
-from pillowtalk.base import MarshpillowBase
+from pillowtalk.base import PillowtalkBase
 from pillowtalk.relationship import Relationship
 from pillowtalk.exceptions import PillowtalkInitializerError
 
@@ -27,7 +27,7 @@ def add_schema(cls, *args, **kwargs):
     """ Decorator that adds a dynamically generated schema to a model """
 
     # add model to Base.models
-    MarshpillowBase.models[cls.__name__] = cls
+    PillowtalkBase.models[cls.__name__] = cls
 
     # automatically generated Schema
     class ModSchema(BaseSchema):
