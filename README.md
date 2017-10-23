@@ -7,8 +7,8 @@
 #### Build/Coverage Status
 Branch | Build | Coverage
 :---: | :---: | :---:
-**master** | [![travis build](https://img.shields.io/travis/jvrana/pillowtalk/master.svg)](https://travis-ci.org/jvrana/pillowtalk/master) | [![Coverage Status](https://coveralls.io/repos/github/jvrana/pillowtalk/badge.svg?branch=master)](https://coveralls.io/github/jvrana/pillowtalk?branch=master)
-**development** | [![travis build](https://img.shields.io/travis/jvrana/pillowtalk/development.svg)](https://travis-ci.org/jvrana/pillowtalk/development) | [![Coverage Status](https://coveralls.io/repos/github/jvrana/pillowtalk/badge.svg?branch=development)](https://coveralls.io/github/jvrana/pillowtalk?branch=development)
+**master** | [![travis build](https://img.shields.io/travis/jvrana/Pillowtalk/master.svg)](https://travis-ci.org/jvrana/Pillowtalk/master) | [![Coverage Status](https://coveralls.io/repos/github/jvrana/Pillowtalk/badge.svg?branch=master)](https://coveralls.io/github/jvrana/Pillowtalk?branch=master)
+**development** | [![travis build](https://img.shields.io/travis/jvrana/Pillowtalk/development.svg)](https://travis-ci.org/jvrana/Pillowtalk/development) | [![Coverage Status](https://coveralls.io/repos/github/jvrana/Pillowtalk/badge.svg?branch=development)](https://coveralls.io/github/jvrana/Pillowtalk?branch=development)
 
 # **Pillowtalk**
 
