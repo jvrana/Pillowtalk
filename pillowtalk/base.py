@@ -35,7 +35,7 @@ class APIInterface(object):
         raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("update", cls.__name__))
 
 
-class MarshpillowBase(APIInterface, object):
+class PillowtalkBase(APIInterface, object):
     """ Basic model for api items """
 
     Schema = None
@@ -63,7 +63,7 @@ class MarshpillowBase(APIInterface, object):
             return x
         schema_cls = object.__getattribute__(self, Schema.__name__)
         if name in schema_cls.relationships:
-            if object.__getattribute__(self, MarshpillowBase.UNMARSHALL):  # locking marshalling prevents recursion
+            if object.__getattribute__(self, PillowtalkBase.UNMARSHALL):  # locking marshalling prevents recursion
                 # Decide to use original value or fullfilled value...
                 r = schema_cls.relationships[name]
                 if type(x) is r.mod2:  # if relationship is already fullfilled
@@ -165,11 +165,11 @@ class MarshpillowBase(APIInterface, object):
 
     def _lock_unmarshalling(self):
         """ locks model so relationships cannot be fullfilled. Prevents recursion. """
-        object.__setattr__(self, MarshpillowBase.UNMARSHALL, False)
+        object.__setattr__(self, PillowtalkBase.UNMARSHALL, False)
 
     def _unlock_unmarshalling(self):
         """ unlocks model so relationships can be fullfilled. """
-        object.__setattr__(self, MarshpillowBase.UNMARSHALL, True)
+        object.__setattr__(self, PillowtalkBase.UNMARSHALL, True)
 
     # def _add_relationships(self):
     #     """ Copies relationship found in the Schema to this instance """
@@ -191,7 +191,7 @@ class MarshpillowBase(APIInterface, object):
         models = None
         if type(data) is list:
             models = cls.json_to_models(data)
-            # if len(models) > 0 and issubclass(models[0].__class__, MarshpillowBase):
+            # if len(models) > 0 and issubclass(models[0].__class__, PillowtalkBase):
             #     # [m._add_relationships() for m in models]
         elif type(data) is dict:
             models = cls.json_to_model(data)

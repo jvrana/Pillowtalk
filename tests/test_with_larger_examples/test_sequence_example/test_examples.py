@@ -57,7 +57,7 @@ def folder_json():
      {'id': 'seq_vA5dxrqd', 'name': 'pMODU6-pGALZ4-AlphaFactor'}], 'type'            : 'ALL'}
 
 def test_folder(folder_json):
-    class MyBase(MarshpillowBase):
+    class MyBase(PillowtalkBase):
 
         def find(self, *args, **kwargs):
             pass

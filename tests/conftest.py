@@ -4,7 +4,7 @@ from pillowtalk import *
 
 @pytest.fixture(scope="module")
 def mybase():
-    class MyBase(MarshpillowBase):
+    class MyBase(PillowtalkBase):
 
         items = []
 

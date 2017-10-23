@@ -58,3 +58,4 @@ htmlcov/*
 .coverage
 *.pyc
 __pycache__
+*.xml
