@@ -5,7 +5,7 @@ from pillowtalk import *
 def API():
     class API(object):
 
-        def __init__(self, login, password, home):
+        def __init__(self, login, password, home, session_name=None):
             vars(self).update(locals())
     return API
 
@@ -27,7 +27,7 @@ def fastfoodexample(API):
     ]
 
     for cred in credential_list:
-        SessionManager._create_with_connector(API, **cred)
+        SessionManager.register_connector(API(**cred), cred["session_name"])
     return credential_list
 
 def test_session_subclass(API):
@@ -43,8 +43,8 @@ def test_session_subclass(API):
     class Session(SessionManager):
 
         @classmethod
-        def create(cls, **cred):
-            return cls._create_with_connector(API, **cred)
+        def create(cls, session_name=None, **cred):
+            return cls.register_connector(API(**cred), session_name=session_name)
 
     for cred in credential_list:
         Session.create(**cred)
@@ -59,7 +59,7 @@ def test_session_creator(API):
         "home": "www.timmyhortons.can"
     }
 
-    SessionManager._create_with_connector(API, **credentials)
+    SessionManager.register_connector(API(**credentials))
     s = SessionManager.session
     assert type(s) is API
     for k, v in credentials.items():
