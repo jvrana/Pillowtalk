@@ -56,4 +56,9 @@ class SessionManager(object, metaclass=SessionManagerHook):
     def close(cls):
         cls.session = None
 
+    @classmethod
+    def reset(cls):
+        cls.sessions = None
+        cls.session = None
+
 

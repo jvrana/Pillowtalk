@@ -96,3 +96,9 @@ def test_multiple_session_classes(fastfoodexample):
         pass
 
     assert NewSession.session is None
+
+def test_session_reset(fastfoodexample):
+    assert SessionManager.session is not None
+    SessionManager.reset()
+    assert SessionManager.sessions is None
+    assert SessionManager.session is None
