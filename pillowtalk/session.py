@@ -3,6 +3,7 @@
 # TODO: Test to make sure session and sessions aren't shared between Subclasses
 from .exceptions import PillowtalkSessionError
 
+
 class SessionManagerHook(type):
     #
     def __init__(cls, name, bases, clsdict):
@@ -51,7 +52,8 @@ class SessionManager(object, metaclass=SessionManagerHook):
         if cls.sessions is None:
             raise PillowtalkSessionError("No sessions found.")
         if name not in cls.sessions:
-            raise PillowtalkSessionError("Session named {} not found. Choose from {}".format(name, cls.sessions.keys()))
+            raise PillowtalkSessionError(
+                    "Session named {} not found. Choose from {}".format(name, list(cls.sessions.keys())))
         cls.session = cls.sessions[name]
 
     @classmethod
@@ -76,5 +78,3 @@ class SessionManager(object, metaclass=SessionManagerHook):
         """ resets the sessions and current session """
         cls.sessions = {}
         cls.session = None
-
-
