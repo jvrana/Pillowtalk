@@ -33,12 +33,8 @@ class SessionManager(object, metaclass=SessionManagerHook):
     sessions = {}
 
     @classmethod
-    def create(cls, *args, session_name=None, **kwargs):
-        cls._create_with_connector(cls, *args, session_name=session_name, **kwargs)
-
-    @classmethod
-    def _create_with_connector(cls, api_connector, *args, session_name=None, **kwargs):
-        cls.session = api_connector(*args, **kwargs)
+    def register_connector(cls, api_connector_instance, session_name=None):
+        cls.session = api_connector_instance
         cls._add_session(cls.session, session_name)
         cls.set(session_name)
 
