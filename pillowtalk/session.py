@@ -1,7 +1,7 @@
 # TODO: Make session a dict of class names and session...
 # TODO: Make sessions a dict of dict of classname and sessions
 # TODO: Test to make sure session and sessions aren't shared between Subclasses
-
+from .exceptions import PillowtalkSessionError
 
 class SessionManagerHook(type):
     #
@@ -40,11 +40,21 @@ class SessionManager(object, metaclass=SessionManagerHook):
 
     @classmethod
     def _add_session(cls, api_connector, name):
+        if cls.sessions is None:
+            cls.sessions = {}
         cls.sessions[name] = api_connector
 
     @classmethod
     def set(cls, name):
+        if cls.sessions is None:
+            raise PillowtalkSessionError("No sessions found.")
+        if name not in cls.sessions:
+            raise PillowtalkSessionError("Session named {} not found. Choose from {}".format(name, cls.sessions.keys()))
         cls.session = cls.sessions[name]
+
+    @classmethod
+    def empty(cls):
+        return cls.sessions is None or cls.sessions == {}
 
     @classmethod
     def session_name(cls):
@@ -58,7 +68,7 @@ class SessionManager(object, metaclass=SessionManagerHook):
 
     @classmethod
     def reset(cls):
-        cls.sessions = None
+        cls.sessions = {}
         cls.session = None
 
 
