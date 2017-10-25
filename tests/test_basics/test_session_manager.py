@@ -100,5 +100,25 @@ def test_multiple_session_classes(fastfoodexample):
 def test_session_reset(fastfoodexample):
     assert SessionManager.session is not None
     SessionManager.reset()
-    assert SessionManager.sessions is None
+    assert SessionManager.empty()
     assert SessionManager.session is None
+
+def test_session_exceptions(fastfoodexample):
+    SessionManager.sessions = None
+    with pytest.raises(PillowtalkSessionError):
+        SessionManager.set("something")
+
+    SessionManager.sessions = {}
+    with pytest.raises(PillowtalkSessionError):
+        SessionManager.set("something")
+
+def test_session_registration_after_sessions_is_None(API):
+    SessionManager.reset()
+    SessionManager.sessions = None
+    credentials = {
+        "login": "TimHorton",
+        "password": "mmmmmmDonuts",
+        "home": "www.timmyhortons.can"
+    }
+
+    SessionManager.register_connector(API(**credentials))

@@ -1,7 +1,7 @@
 # TODO: Make session a dict of class names and session...
 # TODO: Make sessions a dict of dict of classname and sessions
 # TODO: Test to make sure session and sessions aren't shared between Subclasses
-
+from .exceptions import PillowtalkSessionError
 
 class SessionManagerHook(type):
     #
@@ -34,31 +34,47 @@ class SessionManager(object, metaclass=SessionManagerHook):
 
     @classmethod
     def register_connector(cls, api_connector_instance, session_name=None):
+        """ registers an api_connector instance with session_name """
         cls.session = api_connector_instance
         cls._add_session(cls.session, session_name)
         cls.set(session_name)
 
     @classmethod
     def _add_session(cls, api_connector, name):
+        if cls.sessions is None:
+            cls.sessions = {}
         cls.sessions[name] = api_connector
 
     @classmethod
     def set(cls, name):
+        """ set session by name """
+        if cls.sessions is None:
+            raise PillowtalkSessionError("No sessions found.")
+        if name not in cls.sessions:
+            raise PillowtalkSessionError("Session named {} not found. Choose from {}".format(name, cls.sessions.keys()))
         cls.session = cls.sessions[name]
 
     @classmethod
+    def empty(cls):
+        """ Checks if sessions is empty or None """
+        return cls.sessions is None or cls.sessions == {}
+
+    @classmethod
     def session_name(cls):
+        """ gets current session name"""
         for name, session in cls.sessions.items():
             if cls.session == session:
                 return name
 
     @classmethod
     def close(cls):
+        """ closes the current session """
         cls.session = None
 
     @classmethod
     def reset(cls):
-        cls.sessions = None
+        """ resets the sessions and current session """
+        cls.sessions = {}
         cls.session = None
 
 
