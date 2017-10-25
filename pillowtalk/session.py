@@ -23,7 +23,7 @@ class SessionManagerHook(type):
                 if sessions is None or sessions == []:
                     msg += " There are no sessions available."
                 else:
-                    msg += " Available sessions: {0}.".format(sessions.keys())
+                    msg += " Available sessions: {0}.".format(list(sessions.keys()))
                 raise AttributeError(msg)
 
 
