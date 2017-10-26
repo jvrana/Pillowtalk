@@ -26,6 +26,12 @@ class SessionManagerHook(type):
                     msg += " Available sessions: {0}.".format(list(sessions.keys()))
                 raise AttributeError(msg)
 
+    @property
+    def session_name(cls):
+        for name, session in cls.sessions.items():
+            if cls.session == session:
+                return name
+
 
 class SessionManager(object, metaclass=SessionManagerHook):
     """ Session manager """
@@ -60,13 +66,6 @@ class SessionManager(object, metaclass=SessionManagerHook):
     def empty(cls):
         """ Checks if sessions is empty or None """
         return cls.sessions is None or cls.sessions == {}
-
-    @classmethod
-    def session_name(cls):
-        """ gets current session name"""
-        for name, session in cls.sessions.items():
-            if cls.session == session:
-                return name
 
     @classmethod
     def close(cls):
