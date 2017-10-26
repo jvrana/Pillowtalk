@@ -72,7 +72,7 @@ def test_session_set(fastfoodexample):
     credential_list = fastfoodexample
     for cred in credential_list:
         SessionManager.set(cred["session_name"])
-        assert SessionManager.session_name() == cred["session_name"]
+        assert SessionManager.session_name == cred["session_name"]
         for k, v in cred.items():
             if k != "session_name":
                 assert getattr(SessionManager.session, k) == v
