@@ -143,6 +143,32 @@ s1.name = "something"
 s1.name != SessionManager().name
 ```
 
+#### Saving and loading
+
+SessionManager plays nicely with the pickle module. Save your sessions using `pickle.dump` and reload
+your sessions with `pickle.load`:
+
+```python
+import pickle
+
+# save session info
+with open(filepath, 'wb') as f:
+    f.dump(MySession(), f)
+
+# ...
+# update session info
+with open(filepath, 'rb') as f:
+    f.load(f)
+```
+
+Optionally, `save` and `load` methods are included for convenience:
+
+```python
+MySession().save()
+
+MySession().load()
+```
+
 ## More examples and magic to come!
     Other things include:
         * Magic chaining in relationships

@@ -1,5 +1,5 @@
 import pytest
-
+import os
 from pillowtalk import *
 
 
@@ -38,3 +38,31 @@ def test_create_sessions(APIs):
     assert api1.__dict__ != api2.__dict__
     assert api1.password == cred1["password"]
     assert api2.password == cred2["password"]
+
+
+def test_raise_attribute_error():
+
+    s = SessionManager()
+    with pytest.raises(AttributeError):
+        s.name
+
+def test_create_sessions(APIs):
+    API1, API2, Session = APIs
+
+    class Session2(SessionManager):
+
+        pass
+
+    cred1 = {"login": "John", "password": "Thomason", "home": "www.johnnyt.com"}
+    cred2 = {"login": "John", "password": "Flompson", "home": "www.johnnyf.com"}
+
+    Session().register_connector(API1(**cred1), session_name="API1")
+    Session().register_connector(API2(**cred2), session_name="API2")
+
+    Session2().register_connector(API1(**cred1), session_name="API3")
+    Session2().register_connector(API2(**cred2), session_name="API4")
+
+    this_dir = os.path.dirname(os.path.abspath(__file__))
+    pickle_dir = os.path.join(this_dir, 'pickle_tests')
+
+    Session().save(

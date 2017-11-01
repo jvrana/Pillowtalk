@@ -2,7 +2,7 @@
 # TODO: Make sessions a dict of dict of classname and sessions
 # TODO: Test to make sure session and sessions aren't shared between Subclasses
 from .exceptions import PillowtalkSessionError
-
+import pickle
 
 class SessionManagerHook(type):
 
@@ -96,3 +96,16 @@ class SessionManager(object, metaclass=SessionManagerHook):
                 else:
                     msg += " Available sessions: {0}.".format(list(sessions.keys()))
                 raise AttributeError(msg)
+
+    def save(self, filepath):
+        with open(filepath, 'wb') as f:
+            pickle.dump(self, f)
+
+    def load(self, filepath):
+        with open(filepath, 'rb') as f:
+            pickle.load(self, f)
+
+    def __setstate__(self, state):
+        """ Override so that sessions can be updated with pickle.load """
+        self.__class__._shared_state.update(state)
+        self.__dict__ = self.__class__._shared_state
