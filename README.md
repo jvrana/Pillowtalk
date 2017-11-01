@@ -82,6 +82,67 @@ assert type(a) is Address
 assert person.address_id == 4 # this wasn't defined explicitly but it is inferred from "address": {"id": 4}
 ```
 
+## Session Management
+
+Pillowtalk comes with a SessionManager class. Lets say you have an api connector:
+
+```python
+class MyAPI(object):
+
+    def __init__(*args, **kwargs):
+        self.__dict__.update(locals())
+```
+
+You can create a custom session manager easily by:
+
+```python
+class MySession(SessionManager):
+
+    pass
+```
+
+You can register you connector by:
+```python
+
+# initialize your connectors
+myapi = MyAPI(login="username", password="password", url="myurl")
+myapi2 = MyAPI(login="username", password="password", url="myurl_2")
+
+# register it
+MySession().register_connector(myapi, session_name="session1")
+MySession().register_connector(myapi, session_name="session2")
+```
+
+You can access your apis from anywhere by:
+
+```python
+# set to "session2"
+MySession().set("session2")
+
+# returns API associated with session1
+MySession().session
+
+# print the session_name
+print(MySession().session_name)  # prints "session1"
+```
+
+SessionManager instances are a [Borg idioms](https://www.safaribooksonline.com/library/view/python-cookbook/0596001673/ch05s23.html)
+and share their state between instances:
+
+```python
+s1 = MySession()
+s1.name = "something"
+s2 = MySession()
+s1.__dict__ == s2.__dict__
+```
+
+But not between other subclasses:
+```python
+s1 = MySession()
+s1.name = "something"
+s1.name != SessionManager().name
+```
+
 ## More examples and magic to come!
     Other things include:
         * Magic chaining in relationships
