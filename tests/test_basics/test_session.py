@@ -1,7 +1,7 @@
 import pytest
 import os
 from pillowtalk import *
-
+import copy
 
 @pytest.fixture
 def APIs():
@@ -47,22 +47,13 @@ def test_raise_attribute_error():
         s.name
 
 def test_create_sessions(APIs):
-    API1, API2, Session = APIs
-
-    class Session2(SessionManager):
-
-        pass
-
-    cred1 = {"login": "John", "password": "Thomason", "home": "www.johnnyt.com"}
-    cred2 = {"login": "John", "password": "Flompson", "home": "www.johnnyf.com"}
-
-    Session().register_connector(API1(**cred1), session_name="API1")
-    Session().register_connector(API2(**cred2), session_name="API2")
-
-    Session2().register_connector(API1(**cred1), session_name="API3")
-    Session2().register_connector(API2(**cred2), session_name="API4")
-
+    s = SessionManager()
+    s.name = "before"
     this_dir = os.path.dirname(os.path.abspath(__file__))
-    pickle_dir = os.path.join(this_dir, 'pickle_tests')
-
-    Session().save(
+    test_dir = os.path.dirname(this_dir)
+    file = os.path.join(test_dir, 'pickle_tests', 'pickle1.pkl')
+    s.save(file)
+    s.name = "after"
+    assert SessionManager().name == "after"
+    s.load(file)
+    assert SessionManager().name == "before"
