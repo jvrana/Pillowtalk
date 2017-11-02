@@ -1,4 +1,4 @@
-__version__ = "1.0.7dev"
+__version__ = "1.1.0a"
 
 from .base import *
 from .schemas import *
