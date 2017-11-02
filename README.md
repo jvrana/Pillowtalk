@@ -123,7 +123,7 @@ MySession().set("session2")
 MySession().session
 
 # print the session_name
-print(MySession().session_name)  # prints "session1"
+print(MySession().session_name)  # prints "session2"
 ```
 
 SessionManager instances are a [Borg idioms](https://www.safaribooksonline.com/library/view/python-cookbook/0596001673/ch05s23.html)
