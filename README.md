@@ -146,7 +146,7 @@ s1.name != SessionManager().name
 #### Saving and loading
 
 SessionManager plays nicely with the pickle module. Save your sessions using `pickle.dump` and reload
-your sessions with `pickle.load`:
+your sessions with `pickle.load`. Loading will automatically update all of your session instances for your session class.
 
 ```python
 import pickle
