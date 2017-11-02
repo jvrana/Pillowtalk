@@ -1,10 +1,12 @@
 import inspect
 
 import inflection
-from pillowtalk.relationship import Relationship
 from marshmallow import Schema, fields
+
 from pillowtalk.exceptions import PillowtalkError
+from pillowtalk.relationship import Relationship
 from pillowtalk.utils import validate_init
+
 
 # TODO: Ability to add relationships without relationship string interpretation
 # TODO: Wrap model collections in a class such that __getitem__ will fullfill the relationship...
@@ -33,6 +35,10 @@ class APIInterface(object):
     def update(cls, *args, **kwargs):
         # self.__dict__.update(self.__class__.find(self.id).__dict__)
         raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("update", cls.__name__))
+
+    # TODO: Force unmarshalling of all or some of the relationships...
+    def force(self):
+        raise NotImplementedError("Force is not yet implemented")
 
 
 class PillowtalkBase(APIInterface, object):
@@ -88,17 +94,12 @@ class PillowtalkBase(APIInterface, object):
         v = object.__getattribute__(self, name)
         return v
 
-    # TODO: update ("update with id") or ("update with find name or id")
-    # TODO: raise warning if there is not update
-    def update(self):
-        raise NotImplementedError("Update is not yet implemented. Try to use API wrapper first.")
-
     def _get_relationship(self, name):
         return self.Schema.relationships[name]
 
-    def _has_relationship(self, name):
-        schema_cls = object.__getattribute__(self, Schema.__name__)
-        return name in schema_cls.relationships
+    # def _has_relationship(self, name):
+    #     schema_cls = object.__getattribute__(self, Schema.__name__)
+    #     return name in schema_cls.relationships
 
     @classmethod
     def model_fields(cls):
@@ -202,7 +203,3 @@ class PillowtalkBase(APIInterface, object):
     def dump(self):
         s = self.__class__.Schema()
         return s.dump(self).data
-
-    # TODO: Force unmarshalling of all or some of the relationships...
-    def force(self):
-        raise NotImplementedError("Force is not yet implemented")

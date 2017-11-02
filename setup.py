@@ -17,7 +17,8 @@ tests_require = [
 
 install_requires = [
     'inflection',
-    'marshmallow'
+    'marshmallow',
+    'dill'
 ]
 
 classifiers = [
