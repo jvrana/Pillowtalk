@@ -39,7 +39,7 @@ class SessionManager(object, metaclass=SessionManagerHook):
         shared_state = self.__class__._shared_state
         self.__dict__ = shared_state
         if shared_state == {}:
-            self.session = None
+            self._session_name = None
             self.sessions = {}
 
     @property
@@ -48,10 +48,15 @@ class SessionManager(object, metaclass=SessionManagerHook):
             if self.session == session:
                 return name
 
-    def register_connector(self, api_connector_instance, session_name=None):
+    @property
+    def session(self):
+        if self._session_name not in self.sessions:
+            return None
+        return self.sessions[self._session_name]
+
+    def register_connector(self, api_connector_instance, session_name="default"):
         """ registers an api_connector instance with session_name """
-        self.session = api_connector_instance
-        self._add_session(self.session, session_name)
+        self._add_session(api_connector_instance, session_name)
         self.set(session_name)
 
     def _add_session(self, api_connector, name):
@@ -61,12 +66,14 @@ class SessionManager(object, metaclass=SessionManagerHook):
 
     def set(self, name):
         """ set session by name """
+        if name is None:
+            raise PillowtalkSessionError("Cannot set name to None")
         if self.sessions is None:
             raise PillowtalkSessionError("No sessions found.")
         if name not in self.sessions:
             raise PillowtalkSessionError(
                     "Session named {} not found. Choose from {}".format(name, list(self.sessions.keys())))
-        self.session = self.sessions[name]
+        self._session_name = name
 
     def empty(self):
         """ Checks if sessions is empty or None """
@@ -74,12 +81,12 @@ class SessionManager(object, metaclass=SessionManagerHook):
 
     def close(self):
         """ closes the current session """
-        self.session = None
+        self._session_name = None
 
     def reset(self):
         """ resets the sessions and current session """
         self.sessions = {}
-        self.session = None
+        self._session_name = None
 
     def __getattr__(self, item):
         sessions = object.__getattribute__(self, "sessions")
