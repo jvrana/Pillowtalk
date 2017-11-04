@@ -1,4 +1,4 @@
-__version__ = "1.1.2a"
+__version__ = "1.1.3a"
 
 
 from .base import *

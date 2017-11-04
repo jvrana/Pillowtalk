@@ -7,15 +7,6 @@ from pillowtalk.exceptions import PillowtalkError
 from pillowtalk.relationship import Relationship
 from pillowtalk.utils import validate_init
 
-
-# TODO: Ability to add relationships without relationship string interpretation
-# TODO: Wrap model collections in a class such that __getitem__ will fullfill the relationship...
-# TODO: Inherit fields and relationships from super class
-# TODO: Automatically load class when relationship is fullfilled so you don't have to code in cls.load(r) in the Base class you use
-# TODO: partially unmarshalled lists, when calling [i] is will update the object on the fly...
-# TODO: needs to know when object is deserialized completely.
-
-
 class PillowtalkBase(object):
     """ Basic model for api items """
 
