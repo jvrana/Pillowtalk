@@ -12,17 +12,14 @@ def validate_init(fxn):
         if len(args) > len(fields):
             raise TypeError("Expected {0} arguments but got {1} for {2}.__init__".format(
                     len(fields), len(args), self.__class__.__name__))
-        for i, a in enumerate(args):
-            f = fields[i]
-            field_dict[f] = a
-        for k, v in kwargs.items():
-            if k in field_dict:
-                raise PillowtalkInitializerError("Got multiple values for {0}".format(k))
+        for key, val in kwargs.items():
+            if key in field_dict:
+                raise PillowtalkInitializerError("{0} got multiple values for {1}".format(self.__class__.__name__, key))
             else:
-                field_dict[k] = v
-        for f in fields:
-            if f not in field_dict.keys():
-                raise PillowtalkInitializerError("Missing argument for {0}".format(f))
+                field_dict[key] = val
+        for field in fields:
+            if field not in field_dict.keys():
+                raise PillowtalkInitializerError("{0} is missing argument {1}".format(self.__class__.__name__, field))
         return fxn(self, (), **field_dict)
 
     return wrapped

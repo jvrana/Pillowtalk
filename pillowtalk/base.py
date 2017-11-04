@@ -15,6 +15,7 @@ from pillowtalk.utils import validate_init
 # TODO: partially unmarshalled lists, when calling [i] is will update the object on the fly...
 # TODO: needs to know when object is deserialized completely.
 
+# TODO: Remove APIInterface completely, move to README
 class APIInterface(object):
     @classmethod
     def find(cls, *args, **kwargs):
