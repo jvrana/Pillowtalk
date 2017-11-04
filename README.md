@@ -169,7 +169,7 @@ MySession().save()
 MySession().load()
 ```
 
-## More examples and magic to come!
+## More examples to come!
     Other things include:
         * Magic chaining in relationships
         * Session managing suggestions
