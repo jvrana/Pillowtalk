@@ -1,6 +1,5 @@
-# TODO: Make session a dict of class names and session...
-# TODO: Make sessions a dict of dict of classname and sessions
-# TODO: Test to make sure session and sessions aren't shared between Subclasses
+# TODO: Remove sessions completely...
+
 from .exceptions import PillowtalkSessionError
 import dill
 

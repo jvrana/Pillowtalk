@@ -1,5 +1,6 @@
 import re
 
+# TODO: Make relationships more explicit and clear
 
 class Relationship(object):
     DELIM = "<>"
