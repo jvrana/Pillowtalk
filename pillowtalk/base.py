@@ -15,34 +15,8 @@ from pillowtalk.utils import validate_init
 # TODO: partially unmarshalled lists, when calling [i] is will update the object on the fly...
 # TODO: needs to know when object is deserialized completely.
 
-# TODO: Remove APIInterface completely, move to README
-class APIInterface(object):
-    @classmethod
-    def find(cls, *args, **kwargs):
-        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("find", cls.__name__))
 
-    @classmethod
-    def where(cls, *args, **kwargs):
-        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("where", cls.__name__))
-
-    @classmethod
-    def all(cls):
-        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("all", cls.__name__))
-
-    @classmethod
-    def find_by_name(cls, *args, **kwargs):
-        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("find_by_name", cls.__name__))
-
-    def update(cls, *args, **kwargs):
-        # self.__dict__.update(self.__class__.find(self.id).__dict__)
-        raise NotImplementedError("method \"{0}\" is not yet implemented for {1}.".format("update", cls.__name__))
-
-    # TODO: Force unmarshalling of all or some of the relationships...
-    def force(self):
-        raise NotImplementedError("Force is not yet implemented")
-
-
-class PillowtalkBase(APIInterface, object):
+class PillowtalkBase(object):
     """ Basic model for api items """
 
     Schema = None
