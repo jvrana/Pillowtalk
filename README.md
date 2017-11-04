@@ -168,13 +168,3 @@ MySession().save()
 
 MySession().load()
 ```
-
-## More examples to come!
-    Other things include:
-        * Magic chaining in relationships
-        * Session managing suggestions
-        * automatically creating model skeletons from list of JSON
-        * model relationships through associations
-        * examples of connecting to MySQL or SQLlite
-        * examples of using CLI through hug
-        
