@@ -123,7 +123,7 @@ MySession().set("session2")
 MySession().session
 
 # print the session_name
-print(MySession().session_name)  # prints "session1"
+print(MySession().session_name)  # prints "session2"
 ```
 
 SessionManager instances are a [Borg idioms](https://www.safaribooksonline.com/library/view/python-cookbook/0596001673/ch05s23.html)
@@ -146,7 +146,7 @@ s1.name != SessionManager().name
 #### Saving and loading
 
 SessionManager plays nicely with the pickle module. Save your sessions using `pickle.dump` and reload
-your sessions with `pickle.load`:
+your sessions with `pickle.load`. Loading will automatically update all of your session instances for your session class.
 
 ```python
 import pickle
