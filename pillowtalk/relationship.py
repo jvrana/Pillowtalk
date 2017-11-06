@@ -1,7 +1,6 @@
 import re
 
 # TODO: Make relationships more explicit and clear
-
 # TODO: absolutely need a better way to define relationships...
 
 class Relationship(object):

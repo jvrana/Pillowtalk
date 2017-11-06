@@ -1,14 +1,14 @@
 import inspect
 
 import inflection
-from marshmallow import Schema, fields
+import marshmallow
 
 from pillowtalk.exceptions import PillowtalkError
 from pillowtalk.relationship import Relationship
 from pillowtalk.utils import validate_init
 
 class PillowtalkBase(object):
-    """ Basic model for api items """
+    """ Basic model for api items. Holds a Marshmallow schema for marshalling and unmarshalling. """
 
     Schema = None
     models = {}
@@ -33,7 +33,7 @@ class PillowtalkBase(object):
         x = object.__getattribute__(self, name)
         if name.startswith("_"):
             return x
-        schema_cls = object.__getattribute__(self, Schema.__name__)
+        schema_cls = object.__getattribute__(self, marshmallow.Schema.__name__)
         if name in schema_cls.relationships:
             if object.__getattribute__(self, PillowtalkBase.UNMARSHALL):  # locking marshalling prevents recursion
                 # Decide to use original value or fullfilled value...
@@ -50,7 +50,7 @@ class PillowtalkBase(object):
 
     def __getattr__(self, name, saveattr=False):
         """ If attribute is not found, attempts to fullfill the relationship """
-        schema_cls = object.__getattribute__(self, Schema.__name__)
+        schema_cls = object.__getattribute__(self, marshmallow.Schema.__name__)
         if name in schema_cls.relationships:
             v = self.fullfill_relationship(name)
             if saveattr:
@@ -70,8 +70,18 @@ class PillowtalkBase(object):
     @classmethod
     def model_fields(cls):
         """ Returns the models fields """
-        members = inspect.getmembers(cls, lambda a: not (inspect.isroutine(a)))
-        return [m for m in members if issubclass(m[1].__class__, fields.Field)]
+
+        # retrieve non-function members of the class
+        non_fxn_members = inspect.getmembers(cls, lambda a: not (inspect.isroutine(a)))
+
+        # return Marhsmallow fields from members
+        marshmallow_fields = []
+        for member in non_fxn_members:
+            name, value = member
+            if issubclass(value.__class__, marshmallow.fields.Field):
+                marshmallow_fields.append(member)
+
+        return marshmallow_fields
 
     def fullfill_relationship(self, relationship_name):
         """

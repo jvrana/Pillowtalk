@@ -24,7 +24,12 @@ class BaseSchema(Schema):
 
 
 def add_schema(cls, *args, **kwargs):
-    """ Decorator that adds a dynamically generated schema to a model """
+    """ Decorator that adds a dynamically generated schema to a model.
+
+    Creates a schema based on the subclass definition.
+
+    (1) Takes FIELDS class variable from class definition
+    """
 
     # add model to Base.models
     PillowtalkBase.models[cls.__name__] = cls
@@ -56,11 +61,6 @@ def add_schema(cls, *args, **kwargs):
 
         def _load_one_and_many(self):
             """ create nested fields from ONE and MANY """
-            """
-                Types of relationships:
-                    ["Address"]
-                    SmartRelation(mod1, attr1, etc.)
-            """
             if hasattr(cls, Relationship.RELATIONSHIP_FIELD_NAME):
                 for relation in cls.RELATIONSHIPS:
                     model = None
