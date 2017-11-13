@@ -1,6 +1,4 @@
 from marshmallow import SchemaOpts, Schema, post_load, fields, pre_load, pre_dump
-from relationships import Relation
-from marshmallow import SchemaOpts, Schema, post_load, fields, pre_load, pre_dump
 
 from relationships import Relation
 
