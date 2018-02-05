@@ -6,7 +6,7 @@
 
 #### Build/Coverage Status
 
-** NO LONGER BEING DEVELOPED **
+**NO LONGER BEING DEVELOPED**
 
 Branch | Build | Coverage
 :---: | :---: | :---:
