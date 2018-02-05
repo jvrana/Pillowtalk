@@ -5,6 +5,9 @@
 ![pillow_talk_icon](images/pillowtalk_icon_medium.png?raw=true)
 
 #### Build/Coverage Status
+
+** NO LONGER BEING DEVELOPED **
+
 Branch | Build | Coverage
 :---: | :---: | :---:
 **master** | [![travis build](https://img.shields.io/travis/jvrana/Pillowtalk/master.svg)](https://travis-ci.org/jvrana/Pillowtalk/master) | [![Coverage Status](https://coveralls.io/repos/github/jvrana/Pillowtalk/badge.svg?branch=master)](https://coveralls.io/github/jvrana/Pillowtalk?branch=master)
